@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository
 public interface PrisonGuardRepository extends JpaRepository<PrisonGuard, String> {
-	public List<PrisonGuard> findAll();
+    public List<PrisonGuard> findAll();
+
     public List<PrisonGuard> findByName(String name);
 }
