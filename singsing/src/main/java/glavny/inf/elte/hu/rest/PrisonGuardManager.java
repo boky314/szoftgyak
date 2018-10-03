@@ -23,14 +23,14 @@ import glavny.inf.elte.hu.data.PrisonGuardRepository;
 @RequestMapping("prisonguard")
 @Transactional
 public class PrisonGuardManager {
-	private static Logger log = LoggerFactory.getLogger(UserManager.class);
+    private static Logger log = LoggerFactory.getLogger(UserManager.class);
 
-	@Autowired
+    @Autowired
     private PrisonGuardRepository prisonGuardRepository;
 
     @GetMapping("/")
     public ResponseEntity<List<PrisonGuard>> getPrisoners(Authentication auth) {
-    	List<PrisonGuard> result = prisonGuardRepository.findAll();
+        List<PrisonGuard> result = prisonGuardRepository.findAll();
         return new ResponseEntity<List<PrisonGuard>>(result, HttpStatus.OK);
     }
 
