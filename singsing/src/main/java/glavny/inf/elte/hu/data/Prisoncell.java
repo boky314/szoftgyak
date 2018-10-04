@@ -9,8 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name="prisoncell")
-
+@Table(name = "prisoncell")
 
 public class Prisoncell implements Serializable {
 
@@ -25,14 +24,16 @@ public class Prisoncell implements Serializable {
     @Column(name = "CELL_DESC")
     private String cellDesc;
 
+    @Basic
+    @Column(name = "FLOOR")
+    private int floor;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
     private Set<Prisoner> prisoners = new HashSet<>(0);
 
-    public Set<Prisoner> getPrisoners()
-    {
+    public Set<Prisoner> getPrisoners() {
         return prisoners;
     }
-
 
     public int getId() {
         return id;
@@ -41,7 +42,6 @@ public class Prisoncell implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public int getSpace() {
         return space;
@@ -59,19 +59,27 @@ public class Prisoncell implements Serializable {
         this.cellDesc = cellDesc;
     }
 
+    public int getFloor() {
+        return floor;
+    }
+
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Prisoncell that = (Prisoncell) o;
-        return id == that.id &&
-                space == that.space &&
-                Objects.equals(cellDesc, that.cellDesc);
+        return id == that.id && space == that.space && Objects.equals(cellDesc, that.cellDesc) && floor == that.floor;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, space, cellDesc);
+        return Objects.hash(id, space, cellDesc, floor);
     }
 }
