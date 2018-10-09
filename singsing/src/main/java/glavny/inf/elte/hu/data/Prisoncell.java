@@ -1,12 +1,21 @@
 package glavny.inf.elte.hu.data;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-import java.util.stream.Collectors;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "prisoncell")
@@ -30,6 +39,11 @@ public class Prisoncell implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
     private Set<Prisoner> prisoners = new HashSet<>(0);
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AREA_ID")
+    @JsonIgnore
+    private Area area;
 
     public Set<Prisoner> getPrisoners() {
         return prisoners;
