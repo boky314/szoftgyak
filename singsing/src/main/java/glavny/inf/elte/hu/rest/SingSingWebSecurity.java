@@ -25,6 +25,7 @@ public class SingSingWebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/self").authenticated()
                 .antMatchers(HttpMethod.POST,"/prisoncell/new","prisoncell/delete").authenticated()
                 .antMatchers(HttpMethod.POST, "/prisoner/new","/prisoner/save").authenticated()
+                .antMatchers(HttpMethod.POST, "/prisonguard/new","/prisonguard/save").authenticated()
                 .antMatchers(HttpMethod.POST,"/user/password").authenticated()
                 .and()
                 .csrf().disable()
