@@ -29,6 +29,15 @@
                 },function (reason) { console.log(reason); });
             };
 
+
+            $scope.loadGuards = function()
+            {
+                $http.get('/prisonguard/').then(function (res) {
+                    //console.log(res.data);
+                    $scope.guards = res.data;
+                },function (reason) { console.log(reason); });
+            };
+
             $scope.isCurrentPage = function(val){ return $scope.currentPage === val; };
             $scope.setCurrentPage = function (val) { $scope.currentPage = val;};
 
@@ -50,6 +59,11 @@
                 $scope.clearData();
                 $scope.currentPage = "cells";
                 $scope.loadCells();
+            };
+            $scope.loadGuardListPage = function () {
+                $scope.clearData();
+                $scope.currentPage = "guards";
+                $scope.loadGuards();
             };
             $scope.prisonerOfCell = function(id)
             {
@@ -86,6 +100,23 @@
                 $scope.loadPrisonCellsWithSpace();
             };
 
+            $scope.addGuardPage = function() {
+                $scope.clearData();
+                $scope.currentPage = "add_guard";
+                $scope.loadPrisonCellsWithSpace();
+            };
+
+            $scope.editGuardPage = function(id) {
+                var guard  =  $scope.guards.filter(
+                    function (obj) {
+                        return obj.id === id;
+                    }
+                )[0];
+                $scope.clearData();
+                $scope.newGuard = guard;
+                $scope.currentPage = "edit_guard";
+                $scope.loadPrisonCellsWithSpace(); ////////////////////
+            };
 
             $scope.confirmationPage = function( callback, cancelCallback, confirmationText )
             {
@@ -184,6 +215,46 @@
                     "Are you sure to delete Prisoner( "+ prisoner.prisonerName+") with ID: "+id+" ?"
                 );
             };
+            $scope.submitNewGuard = function()
+            {
+                $http.post("/prisonguard/new",$scope.newGuard).then(
+                    function (value) {
+                        console.log("succes");
+                        console.log(value);
+                        $scope.loadGuardListPage();
+                    },function (reason) {
+                        console.log("err");
+                        console.log(reason); }
+                );
+            };
+
+            $scope.deleteGuard = function(id) {
+                var guard  =  $scope.guards.filter(
+                    function (obj) {
+                        return obj.id === id;
+                    }
+                )[0];
+                $scope.confirmationPage(
+                    function () {
+                        // Fix
+                        console.log(guard);
+                        guard.name = guard.prisonGuardName;
+                        $http.post("/prisonguard/delete",guard).then(
+                            function (value) {
+                                console.log("succes");
+                                console.log(value);
+                                $scope.loadGuardListPage();
+                            },function (reason) {
+                                $scope.loadGuardListPage();
+                                console.log("err");
+                                console.log(reason); }
+                        );
+                    }, function () {
+                        $scope.loadPrisonerListPage();
+                    },
+                    "Are you sure to delete Guard( "+ guard.prisonGuardName+")?"
+                );
+            };
 
 
             $scope.confirmationPageClear = function()
@@ -217,6 +288,9 @@
         </button>
         <button ng-click="loadPrisonerListPage()">
             Prisoners
+        </button>
+        <button ng-click="loadGuardListPage()">
+            Guards
         </button>
         <div ng-show = "isCurrentPage('cells')">
             <Button ng-click="addCellPage()">
@@ -308,6 +382,33 @@
 
 
     </div>
+        <div ng-show = isCurrentPage("guards")>
+            <Button ng-click="addGuardPage()">
+                Add Guard
+            </Button>
+            <table>
+                <thead>
+                <td>
+                    NAME
+                </td>
+                <td>
+                    DELETE
+                </td>
+                </thead>
+                <tbody ng-repeat="i in guards">
+                <tr>
+                    <td>{{i.prisonGuardName}}</td>
+                    <td>
+                        <button ng-click = "deleteGuard(i.id)">
+                            X
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+
 
         <div ng-show="isCurrentPage('add_cell')">
             <form>
@@ -364,6 +465,21 @@
                 Cancle
             </button>
         </div>
+
+        <div ng-show="isCurrentPage('add_guard')">
+            <form>
+                Name:<br>
+                <input type="text" ng-model="newGuard.prisonGuardName"><br>
+                <br><br>
+            </form>
+            <button ng-click="submitNewGuard()">
+                Add
+            </button>
+            <button ng-click="loadGuardListPage()">
+                Cancle
+            </button>
+        </div>
+
 
         <div ng-show="isCurrentPage('confirmation')">
             <p>{{confirmationText}}</P>
