@@ -3,18 +3,47 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Spring Security Example </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+<div id="passwordError" style="display:none">
+    Password must - Have at least 6 characters - Contain characters from at least 3 of the following categories:
+    <ul>
+        <li>English uppercase letters (A-Z)</li>
+        <li>English lowercase letters (a-z)</li>
+        <li>numbers (0-9)</li>
+        <li>Non-alphanumeric symbols (e.g.: !, #, $, %, Space)</li>
+    </ul>
+</div>
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/login}" method="post">
+<form th:action="@{/login}" method="post" onsubmit="return validatePassword()">
     <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><label> Password: <input type="password" name="password" id="password"/> </label></div>
     <div><input type="submit" value="Sign In"/></div>
 </form>
+<script>
+    function validatePassword(){
+        // Password must - Have at least 6 characters - Contain characters from at least 3 of the following categories:
+        // - English uppercase letters (A-Z)
+        // - English lowercase letters (a-z)
+        // - numbers (0-9)
+        // - Non-alphanumeric symbols (e.g.: !, #, $, %, Space)
+        var regexp = /^(((?=.*\d)(?=.*[a-z])(?=.*[A-Z])){3}|((?=.*\d)(?=.*[a-z])(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])){3}|((?=.*\d)(?=.*[a-z])(?=.*[\u0080-\uffff])){3}|((?=.*\d)(?=.*[A-Z])(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])){3}|((?=.*\d)(?=.*[A-Z])(?=.*[\u0080-\uffff])){3}|((?=.*\d)(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])(?=.*[\u0080-\uffff])){3}|((?=.*[a-z])(?=.*[A-Z])(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])){3}|((?=.*[a-z])(?=.*[A-Z])(?=.*[\u0080-\uffff])){3}|((?=.*[a-z])(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])(?=.*[\u0080-\uffff])){3}|((?=.*[A-Z])(?=.*[!"#$%&'()*+, \-./:;<=>?@ [\\\]^_`}|}~])(?=.*[\u0080-\uffff])){3}).{6,}$/;
+
+        if(regexp.test($("input#password").val())){
+            $("#passwordError").hide();
+            return true;
+        }else{
+            $("#passwordError").show();
+            return false;
+        }
+
+    }
+</script>
 </body>
 </html>
