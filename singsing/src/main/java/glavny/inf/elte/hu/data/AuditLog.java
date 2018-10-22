@@ -22,15 +22,22 @@ public class AuditLog {
 
     @Basic
     @Column(name = "DATETIME")
-    private int datetime;
+    private long datetime;
     
     @Basic
     @Column(name = "TYPE")
-    private Type type;
+    private ChangeType type;
     
     @Basic
     @Column(name = "CHANGE")
     private String change;
+    
+    public AuditLog(String user, long datetime, ChangeType type, String change) {
+        setUser(user);
+        setDatetime(datetime);
+        setType(type);
+        setChange(change);
+    }
     
     public int getId() {
         return id;
@@ -48,19 +55,19 @@ public class AuditLog {
         this.user = user;
     }
     
-    public int getDatetime() {
+    public long getDatetime() {
         return datetime;
     }
     
-    public void setDatetime(int datetime) {
+    public void setDatetime(long datetime) {
         this.datetime = datetime;
     }
     
-    public Type getType() {
+    public ChangeType getType() {
         return type;
     }
     
-    public void setType(Type type) {
+    public void setType(ChangeType type) {
         this.type = type;
     }
     
@@ -75,13 +82,13 @@ public class AuditLog {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        long result = 1;
         result = prime * result + ((change == null) ? 0 : change.hashCode());
         result = prime * result + datetime;
         result = prime * result + id;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + ((user == null) ? 0 : user.hashCode());
-        return result;
+        return (int) result;
     }
 
     @Override
@@ -111,8 +118,4 @@ public class AuditLog {
             return false;
         return true;
     }
-}
-
-enum Type {
-    CREATE, MODIFY, DELETE
 }
