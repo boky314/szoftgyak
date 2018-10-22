@@ -74,4 +74,10 @@ public class Prisoncell implements Serializable {
 
         return Objects.hash(id, space, cellDesc);
     }
+    
+    @Override
+    public String toString() {
+        return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
+                + "]";
+    }
 }
