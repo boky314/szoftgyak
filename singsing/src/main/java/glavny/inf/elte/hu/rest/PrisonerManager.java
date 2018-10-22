@@ -1,15 +1,12 @@
 package glavny.inf.elte.hu.rest;
 
 
-import glavny.inf.elte.hu.data.Area;
-import glavny.inf.elte.hu.data.Prisoncell;
-import glavny.inf.elte.hu.data.PrisoncellRepository;
-import glavny.inf.elte.hu.data.Prisoner;
-import glavny.inf.elte.hu.data.PrisonerRepository;
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,11 +15,21 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.sql.Timestamp;
-import java.util.List;
+import glavny.inf.elte.hu.data.AuditLog;
+import glavny.inf.elte.hu.data.AuditLogRepository;
+import glavny.inf.elte.hu.data.ChangeType;
+import glavny.inf.elte.hu.data.Prisoncell;
+import glavny.inf.elte.hu.data.PrisoncellRepository;
+import glavny.inf.elte.hu.data.Prisoner;
+import glavny.inf.elte.hu.data.PrisonerRepository;
 
 @RestController
 @RequestMapping("prisoner")
@@ -34,6 +41,8 @@ public class PrisonerManager {
     private PrisonerRepository prisonerRepository;
     @Autowired
     private PrisoncellRepository prisoncellRepository;
+    @Autowired
+    private AuditLogRepository auditLogRepository;
 
     @GetMapping("/")
     public  ResponseEntity<List<Prisoner>> getPrisoners(Authentication auth)
@@ -69,7 +78,9 @@ public class PrisonerManager {
 
 
     @PostMapping("/new")
-    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner b, UriComponentsBuilder builder) {
+    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner b, UriComponentsBuilder builder, Principal principal) {
+        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.CREATE, b.toString()));
+        
         boolean flag = true;
         Prisoncell c = prisoncellRepository.getOne(b.getCellId());
         if(c.getPrisoners().size() >=  c.getSpace())
@@ -90,8 +101,10 @@ public class PrisonerManager {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner r)
+    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner r, Principal principal)
     {
+        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.MODIFY, r.toString()));
+        
         Prisoncell c = prisoncellRepository.getOne(r.getCellId());
         if(c.getPrisoners().size() >=  c.getSpace())
         {
