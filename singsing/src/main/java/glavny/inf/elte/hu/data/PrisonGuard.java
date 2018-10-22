@@ -15,6 +15,10 @@ public class PrisonGuard {
     public String getPrisonGuardName() {
         return name;
     }
+    public void setPrisonGuardName(String prisonGuardName) {
+        this.name = prisonGuardName;
+    }
+
 
     @Override
     public int hashCode() {
