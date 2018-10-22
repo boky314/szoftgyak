@@ -107,4 +107,10 @@ public class Prisoner {
 
         return Objects.hash(id, prisonerName, incident, releaseDate, placeDate);
     }
+    
+    @Override
+    public String toString() {
+        return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
+                + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + ", cell=" + cell + "]";
+    }
 }

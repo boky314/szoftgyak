@@ -40,4 +40,9 @@ public class PrisonGuard {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "PrisonGuard [name=" + name + "]";
+    }
 }
