@@ -24,6 +24,13 @@ import glavny.inf.elte.hu.data.AuditLogRepository;
 import glavny.inf.elte.hu.data.ChangeType;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
+import glavny.inf.elte.hu.csv.CSVExport;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 @RestController
 @RequestMapping("prisoncell")
@@ -47,6 +54,45 @@ public class PrisonCellManager {
     public ResponseEntity<List<Prisoncell>> getPrisonCellsWithFreeSpace(Authentication auth)
     {
         return new ResponseEntity<List<Prisoncell>>(prisoncellRepository.findCellWithFreeSpace(),HttpStatus.OK);
+    }
+    
+    @PostMapping("/auditlog")
+    public ResponseEntity<Void> createLogCSVFile(@RequestParam(value = "fileName",defaultValue = "D:/log.cs") String fileName,Authentication auth)
+    {
+    	HttpHeaders headers = new HttpHeaders();
+ 
+    	try
+    	{
+    		FileWriter writer = new FileWriter(fileName);
+    		List<AuditLog> logs = auditLogRepository.findAll();
+    		
+    		CSVExport.writeLine(writer, Arrays.asList("ID", "USER", "DATETIME","TYPE","CHANGE"));
+		
+	        for (AuditLog log : logs) {
+	
+	            List<String> list = new ArrayList<>();
+	            list.add(String.valueOf(log.getId()));
+	            list.add(log.getUser());
+	            list.add(String.valueOf(log.getDatetime()));
+	            list.add(String.valueOf(log.getType().toString()));
+	            list.add(String.valueOf(log.getChange()));
+	            
+	            CSVExport.writeLine(writer, list);
+	
+				//try custom separator and quote. 
+				//CSVUtils.writeLine(writer, list, '|', '\"');
+	            
+	            writer.flush();
+	            writer.close();
+	        }
+    	}catch(Exception e) {
+    	 //TO-DO
+    	}
+        
+
+        
+   	
+    	return new ResponseEntity<Void>(headers,HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
