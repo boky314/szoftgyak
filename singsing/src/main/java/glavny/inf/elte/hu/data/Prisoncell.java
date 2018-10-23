@@ -1,5 +1,6 @@
 package glavny.inf.elte.hu.data;
 
+import java.awt.geom.Area;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

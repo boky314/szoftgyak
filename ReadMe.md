@@ -1,3 +1,7 @@
+### Front-end package restore
+- cd singsing\src\main\resources\static
+- npm install
+
 ### Fordítás 
 `mvn package`
 
