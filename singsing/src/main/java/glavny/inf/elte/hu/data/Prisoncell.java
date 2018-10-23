@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name="prisoncell")
-
-
 public class Prisoncell implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private int id;
     @Basic
