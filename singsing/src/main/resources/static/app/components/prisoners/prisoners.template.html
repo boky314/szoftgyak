@@ -1,0 +1,69 @@
+<div>
+    <h1>Add prisoner</h1>
+    <form>
+        Id:<br>
+        <input type="number" ng-model="newPrisoner.id"><br>
+        Name:<br>
+        <input type="text" ng-model="newPrisoner.prisonerName"><br>
+        Incident:<br>
+        <input type="text" ng-model="newPrisoner.incident"><br>
+        ReleaseDate:<br>
+        <input type="date" ng-model="newPrisoner.releaseDate"><br>
+        Cell:<br>
+        <select ng-model="newPrisoner.cellId" ng-options="x.id as x.id for x in cells"></select>
+        <br><br>
+    </form>
+    <button ng-click="submitNewPrisoner()">
+        Save
+    </button>
+    <button ng-click="cancelNewPrisoner()">
+        Cancel
+    </button>
+</div>
+<div>
+        <table id="prisonerList_table" class="table table-condensed table-bordered table-striped">
+            <thead>
+                <td>
+                    ID
+                </td>
+                <td>
+                    NAME
+                </td>
+                <td>
+                    INCIDENT
+                </td>
+                <td>
+                    CELL
+                </td>
+                <td>
+                    PRISONED AT
+                </td>
+                <td>
+                    RELEASE DATA
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </thead>
+            <tbody ng-repeat="i in prisoners track by i.id">
+                <tr>
+                    <td>{{i.id}}</td>
+                    <td>{{i.prisonerName}}</td>
+                    <td>{{i.incident}}</td>
+                    <td>{{i.cellId}}</td>
+                    <td>{{i.placeDate | date:'short'}}</td>
+                    <td>{{i.releaseDate | date:'short' }}</td>
+                    <td>
+                        <button ng-click="editPrisoner(i.id)">
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button ng-click="deletePrisoner(i.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+        </table>
+    </div>
