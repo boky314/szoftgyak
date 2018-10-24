@@ -16,5 +16,7 @@ public interface PrisonerRepository extends JpaRepository<Prisoner,Integer> {
     public List<Prisoner> findPrisonerByPrisonerName(String name);
     @Query("select p from Prisoner p where p.releaseDate > :releaseDate and p.releaseDate < :releaseDate2")
     public List<Prisoner> findPrisonerByReleaseDateBetween(@Param("releaseDate") Timestamp releaseDate, @Param("releaseDate2")Timestamp releaseDate2);
+    @Query("select p from Prisoner p where p.releaseDate > :releaseDate")
+    public List<Prisoner> findPrisonerByReleaseDateAfter(@Param("releaseDate") Timestamp releaseDate);
     public Optional<Prisoner> findById(Integer id);
 }
