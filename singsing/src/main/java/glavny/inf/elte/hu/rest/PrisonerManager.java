@@ -37,7 +37,9 @@ public class PrisonerManager {
     @GetMapping("/")
     public  ResponseEntity<List<Prisoner>> getPrisoners(Authentication auth)
     {
-        return findPrisonerWithReleaseDate(System.currentTimeMillis(), auth);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        List<Prisoner> result = prisonerRepository.findPrisonerByReleaseDateAfter(timestamp);
+        return new ResponseEntity<List<Prisoner>>(result, HttpStatus.OK);
     }
     @GetMapping("/release_date/{time_stamp}")
     public ResponseEntity<List<Prisoner>> findPrisonerWithReleaseDate(@PathVariable("time_stamp") Long time, Authentication auth)
