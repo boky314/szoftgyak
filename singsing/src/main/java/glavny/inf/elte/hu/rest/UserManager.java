@@ -64,7 +64,7 @@ public class UserManager {
     	ArrayList<String> passwords = passDao.findPasswordByUserName(a.getName());
     	
     	if(passwords != null) {
-    		if(!passwords.contains(password)){
+    		if(!passwords.contains("{noop}"+password)){
     			
     			passDao.addNewPassword(a.getName(),"{noop}"+password);
     			userDao.changePassword(a.getName(),"{noop}"+password);
@@ -73,6 +73,12 @@ public class UserManager {
  	                headers.setLocation(new URI("/"));
  	            }
     			catch ( URISyntaxException e )	{ log.warn( "Dispatcher cannot redirect" ); }
+    		}else {
+    			try
+            	{
+            		headers.setLocation(new URI("/password"));
+            	}
+            	catch ( URISyntaxException e )	{ log.warn( "Dispatcher cannot redirect" ); }
     		}
     		
     		if(passwords.size()>4) {
