@@ -1,66 +1,67 @@
 package glavny.inf.elte.hu.data;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
-import java.sql.Timestamp;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.util.*;
+
+import java.util.stream.Collectors;
 
 @Entity
-@Table(name="user")
-public class User implements Serializable {
+@Table(name="password")
+public class Password implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
+    
+    
     @Id
-    @Basic
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
+    private int id;
+    
     @Column(name = "USERNAME")
     private String username;
-
+    
     @Basic
     @Column(name = "PASSWORD")
     private String password;
     
-    @Basic
-    @Column(name = "REGISTRATION")
-    private Timestamp registration;
-
-    public Timestamp getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(Timestamp registration) {
-        this.registration= registration;
-    }
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
+    
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return
-                Objects.equals(username, user.username) &&
-                Objects.equals(password, user.password)&&
-                Objects.equals(registration, user.registration);
+        Password pass = (Password) o;
+        return  Objects.equals(username, pass.username) &&
+                Objects.equals(password, pass.password);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(username, password,registration);
+        return Objects.hash(username,password);
     }
+   
 }
