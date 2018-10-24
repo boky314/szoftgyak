@@ -1,0 +1,48 @@
+<div>
+        <h1>Add or modify area</h1>
+        <form>
+            Id:<br>
+            <input type="number" ng-model="newArea.id">
+            <br>
+            Name:<br>
+            <input type="text" ng-model="newArea.name">
+            <br>
+        </form>
+        <button ng-click="submitNewArea()">
+            Save
+        </button>
+        <button ng-click="cancelNewArea()">
+            Cancel
+        </button>
+    </div>
+    <div>
+        <table id="areaList_table" class="table table-condensed table-bordered table-striped">
+            <thead>
+                <td>
+                    ID
+                </td>
+                <td>
+                    NAME
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </thead>
+            <tbody>
+                <tr ng-repeat="i in areas track by i.id">
+                    <td>{{i.id}}</td>
+                    <td>{{i.name}}</td>
+                    <td>
+                        <button ng-click="editArea(i.id)">
+                            Edit
+                        </button>
+                    </td>
+                    <td>
+                        <button ng-click="deleteArea(i.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+        </table>
+    </div>

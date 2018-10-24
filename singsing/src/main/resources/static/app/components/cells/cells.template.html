@@ -1,0 +1,61 @@
+<div>
+    <h1>Add or modify cell</h1>
+    <form>
+        Id:<br>
+        <input type="number" ng-model="newCell.id"><br>
+        Descriptiom:<br>
+        <input type="text" ng-model="newCell.cellDesc"><br>
+        Space:<br>
+        <input type="number" ng-model="newCell.space"><br>
+        Floor:<br>
+        <input type="number" ng-model="newCell.floor"><br>
+        Area:<br>
+        <select ng-model="newPrisoner.area" ng-options="x.id as x.id for x in areas"></select><br>
+        <br>
+    </form>
+    <button ng-click="submitNewCell()">
+        Save
+    </button>
+    <button ng-click="cancelNewCell()">
+        Cancel
+    </button>
+</div>
+<div>
+    <table id="cellList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                ID
+            </td>
+            <td>
+                SPACE
+            </td>
+            <td>
+                FLOOR
+            </td>
+            <td>
+                DESCRIPTION
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in cells track by i.id">
+                <td>{{i.id}}</td>
+                <td>{{i.space}}</td>
+                <td>{{i.floor}}</td>
+                <td>{{i.cellDesc}}</td>
+                <td>
+                    <button ng-click="editCell(i.id)">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="deleteCell(i.id)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+    </table>
+</div>
