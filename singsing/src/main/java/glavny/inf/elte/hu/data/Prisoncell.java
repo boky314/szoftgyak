@@ -1,6 +1,5 @@
 package glavny.inf.elte.hu.data;
 
-import java.awt.geom.Area;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
