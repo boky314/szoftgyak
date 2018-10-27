@@ -17,24 +17,16 @@ public class SingSingWebSecurity extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/extjs/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/").authenticated()
-                .antMatchers(HttpMethod.GET, "/prisoncell/*","prisoncell/free_space").authenticated()
-                .antMatchers(HttpMethod.GET, "/prisoner/*").authenticated()
-                .antMatchers(HttpMethod.GET,"/prisoner/release_date/*").authenticated()
-                .antMatchers(HttpMethod.GET,"/user/self").authenticated()
-                .antMatchers(HttpMethod.POST,"/prisoncell/new","prisoncell/delete").authenticated()
-                .antMatchers(HttpMethod.POST, "/prisoner/new","/prisoner/save").authenticated()
-                .antMatchers(HttpMethod.POST,"/user/password").authenticated()
-                .and()
-                .csrf().disable()
+                    .anyRequest().authenticated()
+                    .and()
+                    .csrf().disable()
                 .formLogin()
-                .loginPage("/login")
-                .successForwardUrl( "/user/dispatch" )
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .successForwardUrl( "/user/dispatch" )
+                    .permitAll()
+                    .and()
                 .logout()
-                .permitAll();
+                    .permitAll();
     }
 
     @Bean
