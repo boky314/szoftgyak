@@ -3,23 +3,26 @@
     <h1 ng-if="isEditing">Edit cell</h1>
     <form>
         Descriptiom:<br>
-        <input type="text" ng-model="newCell.cellDesc"><br>
+        <input type="text" ng-model="newCell[cellModel.cellDescription]"><br>
         Space:<br>
-        <input type="number" ng-model="newCell.space"><br>
+        <input type="number" ng-model="newCell[cellModel.space]"><br>
         Floor:<br>
-        <input type="number" ng-model="newCell.floor"><br>
+        <input type="number" ng-model="newCell[cellModel.floor]"><br>
         Area:<br>
-        <select ng-model="newCell.areaId" ng-options="x.id as x.name for x in areas"></select><br>
+        <select ng-model="newCell[cellModel.areaId]" ng-options="x[areaModel.id] as x[areaModel.name] for x in areas"></select><br>
         <br>
     </form>
-    <button ng-click="submitNewCell()">
-        <p ng-if="!isEditing">Add</p>
-        <p ng-if="isEditing">Save</p>
+    <button ng-if="!isEditing" ng-click="submitNewCell()">
+        Add
+    </button>
+    <button ng-if="isEditing" ng-click="submitNewCell()">
+        Save
     </button>
     <button ng-click="cancelNewCell()">
         Cancel
     </button>
 </div>
+<hr />
 <div>
     <table id="cellList_table" class="table table-condensed table-bordered table-striped">
         <thead>
@@ -36,23 +39,27 @@
                 DESCRIPTION
             </td>
             <td>
+                AREA
+            </td>
+            <td>
             </td>
             <td>
             </td>
         </thead>
         <tbody>
-            <tr ng-repeat="i in cells track by i.id">
-                <td>{{i.id}}</td>
-                <td>{{i.space}}</td>
-                <td>{{i.floor}}</td>
-                <td>{{i.cellDesc}}</td>
+            <tr ng-repeat="i in cells track by i[cellModel.id]">
+                <td>{{i[cellModel.id]}}</td>
+                <td>{{i[cellModel.space]}}</td>
+                <td>{{i[cellModel.floor]}}</td>
+                <td>{{i[cellModel.cellDescription]}}</td>
+                <td>{{i.areaName}}</td>
                 <td>
-                    <button ng-click="editCell(i.id)">
+                    <button ng-click="editCell(i[cellModel.id])">
                         Edit
                     </button>
                 </td>
                 <td>
-                    <button ng-click="deleteCell(i.id)">
+                    <button ng-click="deleteCell(i[cellModel.id])">
                         Delete
                     </button>
                 </td>

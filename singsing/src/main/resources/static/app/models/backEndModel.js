@@ -18,7 +18,7 @@ angular.
                     cellDescription: "cellDesc",
                     floor: "floor",
                     prisoners: "prisoners",
-                    area: "area"
+                    areaId: "areaId"
                 },
 
                 prisoner: {

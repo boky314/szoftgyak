@@ -6,15 +6,17 @@
         <input type="text" ng-model="newArea[areaModel.name]">
         <br>
     </form>
-    <button ng-click="submitNewArea()">
-        <p ng-if="!isEditing">Add</p>
-        <p ng-if="isEditing">Save</p>
+    <button ng-if="!isEditing" ng-click="submitNewArea()">
+        Add
+    </button>
+    <button ng-if="isEditing" ng-click="submitNewArea()">
+        Save
     </button>
     <button ng-click="cancelNewArea()">
         Cancel
     </button>
 </div>
-<br />
+<hr />
 <div>
     <table id="areaList_table" class="table table-condensed table-bordered table-striped">
         <thead>

@@ -43,7 +43,7 @@ angular.
         };
 
         $scope.submitNewArea = function () {
-          if ($scope.areas.findIndex(a => a.id === $scope.newArea.id) > -1) {
+          if ($scope.areas.findIndex(a => a[$scope.areaModel.id] === $scope.newArea[$scope.areaModel.id]) > -1) {
 
             BackEndService.updateArea($scope.newArea,
               function (result) {
@@ -73,7 +73,7 @@ angular.
 
         $scope.editArea = function (id) {
 
-          var index = $scope.areas.findIndex(a => a.id === id);
+          var index = $scope.areas.findIndex(a => a[$scope.areaModel.id] === id);
 
           if (index > -1) {
 
@@ -84,7 +84,7 @@ angular.
 
         $scope.deleteArea = function (id) {
 
-          var index = $scope.areas.findIndex(a => a.id === id);
+          var index = $scope.areas.findIndex(a => a[$scope.areaModel.id] === id);
 
           if (index > -1) {
 

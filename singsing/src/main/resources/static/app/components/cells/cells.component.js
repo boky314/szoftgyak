@@ -20,6 +20,7 @@ angular.
           BackEndService.getCells(function (result) {
 
             $scope.cells = result.data;
+            assigAreasToCells();
             initDatatable();
           }, function (error) {
 
@@ -32,6 +33,7 @@ angular.
           BackEndService.getAreas(function (result) {
 
             $scope.areas = result.data;
+            loadCells();
           }, function (error) {
 
             $scope.areas = [];
@@ -39,7 +41,23 @@ angular.
           });
         };
 
-        loadCells();
+        var assigAreasToCells = function () {
+
+          $scope.cells.forEach(cell => {
+
+            var areaIndex = $scope.areas.findIndex(area => area[$scope.areaModel.id] === cell[$scope.cellModel.areaId]);
+
+            if (areaIndex > -1) {
+
+              cell.areaName = $scope.areas[areaIndex][$scope.areaModel.name];
+            }
+            else {
+
+              cell.areaName = "";
+            }
+          });
+        };
+
         loadAreas();
 
         var initDatatable = function () {
