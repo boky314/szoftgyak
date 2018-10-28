@@ -2,6 +2,8 @@ package glavny.inf.elte.hu.rest;
 
 import java.util.List;
 
+import glavny.inf.elte.hu.data.Area;
+import glavny.inf.elte.hu.data.AreaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class PrisonCellManager {
 
     @Autowired
     private PrisoncellRepository prisoncellRepository;
+    @Autowired
+    private AreaRepository areaRepository;
 
     @GetMapping("/")
     public ResponseEntity<List<Prisoncell>> getPrisonCells(Authentication auth) {
@@ -51,6 +55,10 @@ public class PrisonCellManager {
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder) {
         boolean flag = true;
+
+        Area area = areaRepository.getOne(c.getAreaId());
+        c.setArea(area);
+
         prisoncellRepository.save(c);
         if (flag == false) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
@@ -62,6 +70,10 @@ public class PrisonCellManager {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updatePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder) {
+
+        Area area = areaRepository.getOne(c.getAreaId());
+        c.setArea(area);
+
         prisoncellRepository.save(c);
 
         HttpHeaders headers = new HttpHeaders();

@@ -42,8 +42,11 @@ public class Prisoncell implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
     private Set<Prisoner> prisoners = new HashSet<>(0);
 
+    @Column(name = "AREA_ID", insertable = false, updatable = false)
+    private int areaId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AREA_ID")
+    @JoinColumn(name = "AREA_ID", nullable = false)
     @JsonIgnore
     private Area area;
 
@@ -97,5 +100,21 @@ public class Prisoncell implements Serializable {
     public int hashCode() {
 
         return Objects.hash(id, space, cellDesc, floor);
+    }
+
+    public int getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(int areaId) {
+        this.areaId = areaId;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
 }
