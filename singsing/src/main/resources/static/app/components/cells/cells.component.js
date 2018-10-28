@@ -5,16 +5,19 @@ angular.
   module('cells', ['backEndService']).
   component('cells', {
     templateUrl: 'app/components/cells/cells.template.html',
-    controller: ['$scope', '$location', 'appSettings', 'BackEndService',
-      function CellsController($scope, $location, appSettings, BackEndService) {
+    controller: ['$scope', 'BackEndService', 'BackEndModel',
+      function CellsController($scope, BackEndService, BackEndModel) {
 
+        $scope.isEditing = false;
         $scope.newCell = {};
         $scope.cells = [];
         $scope.areas = [];
         $scope.prisonersForSelectedCell = [];
+        $scope.areaModel = BackEndModel.area;
+        $scope.cellModel = BackEndModel.prisoncell;
 
         var loadCells = function () {
-          BackEndService.get("/prisoncell/").then(function (result) {
+          BackEndService.getCells(function (result) {
 
             $scope.cells = result.data;
             initDatatable();
@@ -26,10 +29,9 @@ angular.
         };
 
         var loadAreas = function () {
-          BackEndService.get("/area/").then(function (result) {
+          BackEndService.getAreas(function (result) {
 
             $scope.areas = result.data;
-            initDatatable();
           }, function (error) {
 
             $scope.areas = [];
@@ -46,17 +48,23 @@ angular.
 
             var dataTable = $('#cellList_table');
             dataTable.DataTable();
-          }, 10);
+          }, 500);
+        };
+
+        var resetNewCell = function () {
+
+          $scope.isEditing = false;
+          $scope.newCell = {};
         };
 
         $scope.submitNewCell = function () {
 
           if ($scope.cells.findIndex(a => a.id === $scope.newCell.id) > -1) {
 
-            BackEndService.put("/prisoncell/update", $scope.newCell).then(
+            BackEndService.updateCell($scope.newCell,
               function (result) {
 
-                $scope.newCell = {};
+                resetNewCell();
                 loadCells();
               }, function (error) {
 
@@ -66,10 +74,10 @@ angular.
           }
           else {
 
-            BackEndService.post("/prisoncell/new", $scope.newCell).then(
+            BackEndService.createCell($scope.newCell,
               function (result) {
 
-                $scope.newCell = {};
+                resetNewCell();
                 loadCells();
               }, function (error) {
 
@@ -85,6 +93,7 @@ angular.
 
           if (index > -1) {
 
+            $scope.isEditing = true;
             $scope.newCell = $scope.cells[index];
           }
         };
@@ -97,14 +106,13 @@ angular.
 
             var cell = $scope.cells[index];
 
-            BackEndService.post("/prisoncell/delete", cell).then(function (result) {
+            BackEndService.deleteCell(cell, function (result) {
 
               console.log(result);
+              loadCells();
             }, function (error) {
 
               console.log(error);
-            }).then(function () {
-
               loadCells();
             });
           }
@@ -113,6 +121,7 @@ angular.
         $scope.cancelNewCell = function () {
 
           $scope.newCell = {};
+          resetNewCell();
         };
       }
     ]

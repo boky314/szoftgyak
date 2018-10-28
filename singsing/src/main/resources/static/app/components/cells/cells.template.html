@@ -1,8 +1,7 @@
 <div>
-    <h1>Add or modify cell</h1>
+    <h1 ng-if="!isEditing">Add new cell</h1>
+    <h1 ng-if="isEditing">Edit cell</h1>
     <form>
-        Id:<br>
-        <input type="number" ng-model="newCell.id"><br>
         Descriptiom:<br>
         <input type="text" ng-model="newCell.cellDesc"><br>
         Space:<br>
@@ -10,11 +9,12 @@
         Floor:<br>
         <input type="number" ng-model="newCell.floor"><br>
         Area:<br>
-        <select ng-model="newPrisoner.area" ng-options="x.id as x.id for x in areas"></select><br>
+        <select ng-model="newCell.areaId" ng-options="x.id as x.name for x in areas"></select><br>
         <br>
     </form>
     <button ng-click="submitNewCell()">
-        Save
+        <p ng-if="!isEditing">Add</p>
+        <p ng-if="isEditing">Save</p>
     </button>
     <button ng-click="cancelNewCell()">
         Cancel

@@ -5,14 +5,16 @@ angular.
   module('areas', ['backEndService']).
   component('areas', {
     templateUrl: 'app/components/areas/areas.template.html',
-    controller: ['$scope', '$location', 'appSettings', 'BackEndService',
-      function CellsController($scope, $location, appSettings, BackEndService) {
+    controller: ['$scope', 'BackEndService', 'BackEndModel',
+      function CellsController($scope, BackEndService, BackEndModel) {
 
         $scope.newArea = {};
         $scope.areas = [];
+        $scope.isEditing = false;
+        $scope.areaModel = BackEndModel.area;
 
         var loadAreas = function () {
-          BackEndService.get("/area/").then(function (result) {
+          BackEndService.getAreas(function (result) {
 
             $scope.areas = result.data;
             initDatatable();
@@ -31,73 +33,78 @@ angular.
 
             var dataTable = $('#areaList_table');
             dataTable.DataTable();
-          }, 10);
+          }, 500);
         };
 
-        $scope.submitNewArea = function()
-        {
-            if($scope.areas.findIndex(a => a.id === $scope.newArea.id) > -1) {
+        var resetNewArea = function () {
 
-                BackEndService.put("/area/update", $scope.newArea).then(
-                    function (result) {
-                        
-                      $scope.newArea = {};
-                      loadAreas();
-                    },function (error) {
-    
-                        console.log(error);
-                    }
-                );
-            }
-            else {
+          $scope.isEditing = false;
+          $scope.newArea = {};
+        };
 
-                BackEndService.post("/area/new", $scope.newArea).then(
-                    function (result) {
-                        
-                      $scope.newArea = {};
-                      loadAreas();
-                    },function (error) {
-    
-                        console.log(error);
-                    }
-                );
-            }
+        $scope.submitNewArea = function () {
+          if ($scope.areas.findIndex(a => a.id === $scope.newArea.id) > -1) {
+
+            BackEndService.updateArea($scope.newArea,
+              function (result) {
+
+                resetNewArea();
+                loadAreas();
+              }, function (error) {
+
+                console.log(error);
+              }
+            );
+          }
+          else {
+
+            BackEndService.createArea($scope.newArea,
+              function (result) {
+
+                resetNewArea();
+                loadAreas();
+              }, function (error) {
+
+                console.log(error);
+              }
+            );
+          }
         };
 
         $scope.editArea = function (id) {
 
-            var index = $scope.areas.findIndex(a => a.id === id);
+          var index = $scope.areas.findIndex(a => a.id === id);
 
-            if(index > -1) {
+          if (index > -1) {
 
-                $scope.newArea = $scope.areas[index];
-            }
+            $scope.isEditing = true;
+            $scope.newArea = $scope.areas[index];
+          }
         };
 
         $scope.deleteArea = function (id) {
-            
-            var index = $scope.areas.findIndex(a => a.id === id);
 
-            if(index > -1) {
+          var index = $scope.areas.findIndex(a => a.id === id);
 
-                var area = $scope.areas[index];
+          if (index > -1) {
 
-                BackEndService.post("/area/delete", area).then(function (result) {
+            var area = $scope.areas[index];
 
-                    console.log(result);
-                  }, function (error) {
-        
-                    console.log(error);
-                  }).then(function () {
-        
-                    loadAreas();
-                  });
-            }
+            BackEndService.deleteArea(area, function (result) {
+
+              console.log(result);
+              loadAreas();
+            }, function (error) {
+
+              console.log(error);
+              loadAreas();
+            });
+          }
         };
 
         $scope.cancelNewArea = function () {
 
-            $scope.newArea = {};
+          resetNewArea();
         };
       }
     ]
