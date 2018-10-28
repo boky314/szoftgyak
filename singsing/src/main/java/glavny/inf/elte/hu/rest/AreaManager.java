@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import glavny.inf.elte.hu.data.AreaRepository;
 import glavny.inf.elte.hu.data.Area;
+import glavny.inf.elte.hu.data.AreaRepository;
+import glavny.inf.elte.hu.data.PrisoncellRepository;
 
 @RestController
 @RequestMapping("area")
@@ -30,6 +31,9 @@ public class AreaManager {
 
     @Autowired
     private AreaRepository areaRepository;
+
+    @Autowired
+    private PrisoncellRepository prisoncellRepository;
 
     @GetMapping("/")
     public ResponseEntity<List<Area>> getPrisonCells(Authentication auth) {
@@ -60,10 +64,14 @@ public class AreaManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonCell(@RequestBody Area c, UriComponentsBuilder builder) {
-        areaRepository.delete(c);
-
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/{id}").buildAndExpand(c.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        int cells = prisoncellRepository.countCellByAreaId(c.getId());
+        if (cells > 0) {
+            return new ResponseEntity<Void>(headers, HttpStatus.CONFLICT);
+        }
+        else {
+            areaRepository.delete(c);
+            return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        }
     }
 }
