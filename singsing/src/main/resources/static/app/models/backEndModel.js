@@ -27,8 +27,7 @@ angular.
                     incident: "incident",
                     releaseDate: "releaseDate",
                     placeDate: "placeDate",
-                    cellId: "cellId",
-                    cell: "cell"
+                    cellId: "cellId"
                 },
 
                 prisonGuard: {

@@ -101,6 +101,54 @@ angular.
                 });
             };
 
+            this.getPrisoners = function (successCallback, errorCallback) {
+
+                $http.get("/prisoner/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.updatePrisoner = function (prisoner, successCallback, errorCallback) {
+
+                $http.post("/prisoner/save", prisoner).then(
+                    function (result) {
+
+                        successCallback(result);
+                    }, function (error) {
+
+                        errorCallback(error);
+                    }
+                );
+            };
+
+            this.createPrisoner = function (prisoner, successCallback, errorCallback) {
+
+                $http.post("/prisoner/new", prisoner).then(
+                    function (result) {
+
+                        successCallback(result);
+                    }, function (error) {
+
+                        errorCallback(error);
+                    }
+                );
+            };
+
+            this.deletePrisoner = function (prisoner, successCallback, errorCallback) {
+
+                $http.post("/prisoner/delete", prisoner).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
 
             this.get = function (path) {
 

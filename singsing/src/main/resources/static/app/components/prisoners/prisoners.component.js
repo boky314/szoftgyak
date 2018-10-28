@@ -5,18 +5,20 @@ angular.
   module('prisoners', ['backEndService']).
   component('prisoners', {
     templateUrl: 'app/components/prisoners/prisoners.template.html',
-    controller: ['$scope', '$location', 'BackEndService',
-      function PrisonersController($scope, $location, BackEndService) {
+    controller: ['$scope', 'BackEndService', 'BackEndModel',
+      function PrisonersController($scope, BackEndService, BackEndModel) {
 
+        $scope.isEditing = false;
         $scope.newPrisoner = {};
         $scope.prisoners = [];
         $scope.cells = [];
+        $scope.prisonerModel = BackEndModel.prisoner;
+        $scope.cellModel = BackEndModel.prisoncell;
 
         var loadCells = function () {
-          BackEndService.get("/prisoncell/").then(function (result) {
+          BackEndService.getCells(function (result) {
 
             $scope.cells = result.data;
-            initDatatable();
           }, function (error) {
 
             $scope.cells = [];
@@ -25,15 +27,14 @@ angular.
         };
 
         var loadPrisoners = function () {
-          BackEndService.get("/prisoner/").then(function (result) {
+          BackEndService.getPrisoners(function (result) {
 
             $scope.prisoners = result.data;
+            initDatatable();
           }, function (error) {
 
             $scope.prisoners = [];
             console.log(error);
-          }).then(function () {
-
             initDatatable();
           });
         };
@@ -47,17 +48,23 @@ angular.
 
             var dataTable = $('#prisonerList_table');
             dataTable.DataTable();
-          }, 10);
+          }, 500);
+        };
+
+        var resetNewPrisoner = function () {
+
+          $scope.isEditing = false;
+          $scope.newPrisoner = {};
         };
 
         $scope.submitNewPrisoner = function () {
 
-          if ($scope.prisoners.findIndex(a => a.id === $scope.newPrisoner.id) > -1) {
+          if ($scope.prisoners.findIndex(a => a[$scope.prisonerModel.id] === $scope.newPrisoner[$scope.prisonerModel.id]) > -1) {
 
-            BackEndService.post("/prisoner/save", $scope.newPrisoner).then(
+            BackEndService.updatePrisoner($scope.newPrisoner,
               function (result) {
 
-                $scope.newPrisoner = {};
+                resetNewPrisoner();
                 loadPrisoners();
               }, function (error) {
 
@@ -67,13 +74,13 @@ angular.
           }
           else {
 
-            BackEndService.post("/prisoner/new", $scope.newPrisoner).then(
+            BackEndService.createPrisoner($scope.newPrisoner,
               function (result) {
-  
-                $scope.newPrisoner = {};
+
+                resetNewPrisoner();
                 loadPrisoners();
               }, function (error) {
-  
+
                 console.log(error);
               }
             );
@@ -82,30 +89,30 @@ angular.
 
         $scope.editPrisoner = function (id) {
 
-          var index = $scope.prisoners.findIndex(a => a.id === id);
+          var index = $scope.prisoners.findIndex(a => a[$scope.prisonerModel.id] === id);
 
           if (index > -1) {
 
+            $scope.isEditing = true;
             $scope.newPrisoner = $scope.prisoners[index];
           }
         };
 
         $scope.deletePrisoner = function (id) {
 
-          var index = $scope.prisoners.findIndex(a => a.id === id);
+          var index = $scope.prisoners.findIndex(a => a[$scope.prisonerModel.id] === id);
 
           if (index > -1) {
 
             var prisoner = $scope.prisoners[index];
 
-            BackEndService.post("/prisoner/delete", prisoner).then(function (result) {
+            BackEndService.deletePrisoner(prisoner, function (result) {
 
               console.log(result);
+              loadPrisoners();
             }, function (error) {
-  
+
               console.log(error);
-            }).then(function () {
-  
               loadPrisoners();
             });
           }
@@ -113,7 +120,7 @@ angular.
 
         $scope.cancelNewPrisoner = function () {
 
-          $scope.newPrisoner = {};
+          resetNewPrisoner();
         };
       }
     ]
