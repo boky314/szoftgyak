@@ -138,7 +138,6 @@ angular.
 
         $scope.cancelNewCell = function () {
 
-          $scope.newCell = {};
           resetNewCell();
         };
       }
