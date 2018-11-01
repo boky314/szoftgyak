@@ -1,0 +1,37 @@
+<div>
+    <h1>Add new guard</h1>
+    <form>
+        Name:
+        <br>
+        <input type="text" ng-model="newGuard[guardModel.name]">
+        <br>
+    </form>
+    <button ng-click="submitNewGuard()">
+        Add
+    </button>
+    <button ng-click="cancelNewGuard()">
+        Cancel
+    </button>
+</div>
+<hr />
+<div>
+    <table id="guardList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                NAME
+            </td>
+            <td>
+                DELETE
+            </td>
+        </thead>
+        <tbody ng-repeat="i in guards">
+            <tr>
+                <td>{{i[guardModel.name]}}</td>
+                <td>
+                    <button ng-click="deleteGuard(i[guardModel.name])">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+    </table>
+</div>
