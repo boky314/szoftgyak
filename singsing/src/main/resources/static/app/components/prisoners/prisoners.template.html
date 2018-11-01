@@ -1,9 +1,9 @@
 <div>
     <h1 ng-if="!isEditing">Add new prisoner</h1>
     <h1 ng-if="isEditing">Edit prisoner</h1>
-    <form>
+    <form name="prisonerForm">
         Name:<br>
-        <input type="text" ng-model="newPrisoner[prisonerModel.prisonerName]"><br>
+        <input type="text" ng-model="newPrisoner[prisonerModel.prisonerName]" required><br>
         Incident:<br>
         <input type="text" ng-model="newPrisoner[prisonerModel.incident]"><br>
         ReleaseDate:<br>
@@ -11,16 +11,14 @@
         Cell:<br>
         <select ng-model="newPrisoner[prisonerModel.cellId]" ng-options="x[cellModel.id] as x[cellModel.id] for x in cells"></select>
         <br><br>
+        <button ng-disabled="prisonerForm.$invalid" ng-click="submitNewPrisoner()">
+            <span ng-if="!isEditing">Add</span>
+            <span ng-if="isEditing">Save</span>
+        </button>
+        <button ng-click="cancelNewPrisoner()">
+            Cancel
+        </button>
     </form>
-    <button ng-if="!isEditing" ng-click="submitNewPrisoner()">
-        Add
-    </button>
-    <button ng-if="isEditing" ng-click="submitNewPrisoner()">
-        Save
-    </button>
-    <button ng-click="cancelNewPrisoner()">
-        Cancel
-    </button>
 </div>
 <div>
     <table id="prisonerList_table" class="table table-condensed table-bordered table-striped">

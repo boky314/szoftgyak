@@ -2,7 +2,7 @@
 
 angular.
   module('SingSingApp').
-  config(['$locationProvider' ,'$routeProvider',
+  config(['$locationProvider', '$routeProvider',
     function config($locationProvider, $routeProvider) {
 
       $routeProvider.
@@ -18,11 +18,14 @@ angular.
         when('/areas', {
           template: '<areas></areas>'
         }).
+        when('/guards', {
+          template: '<guards></guards>'
+        }).
         otherwise('/home');
 
-        $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
     }
   ]).
   constant('appSettings', {
-    versionNumber: "1.1.0.0"
+    versionNumber: "1.1.1.0"
   });

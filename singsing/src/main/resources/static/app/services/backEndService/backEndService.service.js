@@ -149,25 +149,39 @@ angular.
                 });
             };
 
+            this.getGuards = function (successCallback, errorCallback) {
 
-            this.get = function (path) {
+                $http.get("/prisonguard/").then(function (result) {
 
-                return $http.get(path);
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
             };
 
-            this.post = function (path, body) {
+            this.createGuard = function (guard, successCallback, errorCallback) {
 
-                return $http.post(path, body);
+                $http.post("/prisonguard/new", guard).then(
+                    function (result) {
+
+                        successCallback(result);
+                    }, function (error) {
+
+                        errorCallback(error);
+                    }
+                );
             };
 
-            this.put = function (path, body) {
+            this.deleteGuard = function (guard, successCallback, errorCallback) {
 
-                return $http.put(path, body);
-            };
+                $http.post("/prisonguard/delete", guard).then(function (result) {
 
-            this.delete = function (path, id, successCallback, errorCallback) {
+                    successCallback(result);
+                }, function (error) {
 
-                return $http.delete(path + "/" + id);
+                    errorCallback(error);
+                });
             };
         }
     ]);

@@ -31,7 +31,7 @@ angular.
                 },
 
                 prisonGuard: {
-                    name: "name"
+                    name: "prisonGuardName"
                 }
             };
 
