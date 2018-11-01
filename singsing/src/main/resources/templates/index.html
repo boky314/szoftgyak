@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" ng-app="SingSingApp">
+
+<head>
+  <meta charset="utf-8">
+
+  <base href="/" />
+
+  <title>SingSing</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="node_modules/datatables/media/css/jquery.dataTables.css" />
+  <link rel="stylesheet" href="app/app.css" />
+
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-route/angular-route.js"></script>
+  <script src="node_modules/datatables/media/js/jquery.dataTables.js"></script>
+  <script src="app/app.module.js"></script>
+  <script src="app/app.config.js"></script>
+  <script src="app/index.controller.js"></script>
+  <script src="app/components/home/home.component.js"></script>
+  <script src="app/components/cells/cells.component.js"></script>
+  <script src="app/components/prisoners/prisoners.component.js"></script>
+  <script src="app/components/areas/areas.component.js"></script>
+  <script src="app/services/backEndService/backEndService.service.js"></script>
+  <script src="app/models/backEndModel.js"></script>
+</head>
+
+<body>
+
+  <div ng-controller="indexController">
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/home">SingSing</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/cells">Cells</a></li>
+          <li><a href="/prisoners">Prisoners</a></li>
+          <li><a href="/areas">Areas</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="main-container">
+      <div class="container">
+        <div ng-view="">
+        </div>
+      </div>
+      <div id="footer" class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <p class="text-muted">ELTE</p>
+            <p class="text-muted">{{versionNumber}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

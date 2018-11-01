@@ -1,0 +1,50 @@
+<div>
+    <h1 ng-if="!isEditing">Add new area</h1>
+    <h1 ng-if="isEditing">Edit area</h1>
+    <form>
+        Name:<br>
+        <input type="text" ng-model="newArea[areaModel.name]">
+        <br>
+    </form>
+    <button ng-if="!isEditing" ng-click="submitNewArea()">
+        Add
+    </button>
+    <button ng-if="isEditing" ng-click="submitNewArea()">
+        Save
+    </button>
+    <button ng-click="cancelNewArea()">
+        Cancel
+    </button>
+</div>
+<hr />
+<div>
+    <table id="areaList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                ID
+            </td>
+            <td>
+                NAME
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in areas track by i[areaModel.id]">
+                <td>{{i[areaModel.id]}}</td>
+                <td>{{i[areaModel.name]}}</td>
+                <td>
+                    <button ng-click="editArea(i[areaModel.id])">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="deleteArea(i[areaModel.id])">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+    </table>
+</div>
