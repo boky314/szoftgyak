@@ -1,20 +1,18 @@
 <div>
     <h1 ng-if="!isEditing">Add new area</h1>
     <h1 ng-if="isEditing">Edit area</h1>
-    <form>
+    <form name="areaForm">
         Name:<br>
-        <input type="text" ng-model="newArea[areaModel.name]">
+        <input id="areaName" type="text" ng-model="newArea[areaModel.name]" required>
         <br>
+        <button type="submit" ng-disabled="areaForm.$invalid" ng-click="submitNewArea()">
+            <span ng-if="!isEditing">Add</span>
+            <span ng-if="isEditing">Save</span>
+        </button>
+        <button type="button" ng-click="cancelNewArea()">
+            Cancel
+        </button>
     </form>
-    <button ng-if="!isEditing" ng-click="submitNewArea()">
-        Add
-    </button>
-    <button ng-if="isEditing" ng-click="submitNewArea()">
-        Save
-    </button>
-    <button ng-click="cancelNewArea()">
-        Cancel
-    </button>
 </div>
 <hr />
 <div>

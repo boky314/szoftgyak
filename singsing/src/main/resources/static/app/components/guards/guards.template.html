@@ -1,17 +1,17 @@
 <div>
     <h1>Add new guard</h1>
-    <form>
+    <form name="guardForm">
         Name:
         <br>
-        <input type="text" ng-model="newGuard[guardModel.name]">
+        <input type="text" ng-model="newGuard[guardModel.name]" required>
         <br>
+        <button ng-disabled="guardForm.$invalid" ng-click="submitNewGuard()">
+            Add
+        </button>
+        <button ng-click="cancelNewGuard()">
+            Cancel
+        </button>
     </form>
-    <button ng-click="submitNewGuard()">
-        Add
-    </button>
-    <button ng-click="cancelNewGuard()">
-        Cancel
-    </button>
 </div>
 <hr />
 <div>

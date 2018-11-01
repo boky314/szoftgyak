@@ -1,7 +1,7 @@
 <div>
     <h1 ng-if="!isEditing">Add new cell</h1>
     <h1 ng-if="isEditing">Edit cell</h1>
-    <form>
+    <form name="cellForm">
         Descriptiom:<br>
         <input type="text" ng-model="newCell[cellModel.cellDescription]"><br>
         Space:<br>
@@ -11,16 +11,14 @@
         Area:<br>
         <select ng-model="newCell[cellModel.areaId]" ng-options="x[areaModel.id] as x[areaModel.name] for x in areas"></select><br>
         <br>
+        <button ng-disabled="cellForm.$invalid" ng-click="submitNewCell()">
+            <span ng-if="!isEditing">Add</span>
+            <span ng-if="isEditing">Save</span>
+        </button>
+        <button ng-click="cancelNewCell()">
+            Cancel
+        </button>
     </form>
-    <button ng-if="!isEditing" ng-click="submitNewCell()">
-        Add
-    </button>
-    <button ng-if="isEditing" ng-click="submitNewCell()">
-        Save
-    </button>
-    <button ng-click="cancelNewCell()">
-        Cancel
-    </button>
 </div>
 <hr />
 <div>
