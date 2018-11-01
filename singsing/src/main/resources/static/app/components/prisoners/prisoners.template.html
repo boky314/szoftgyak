@@ -1,0 +1,71 @@
+<div>
+    <h1 ng-if="!isEditing">Add new prisoner</h1>
+    <h1 ng-if="isEditing">Edit prisoner</h1>
+    <form>
+        Name:<br>
+        <input type="text" ng-model="newPrisoner[prisonerModel.prisonerName]"><br>
+        Incident:<br>
+        <input type="text" ng-model="newPrisoner[prisonerModel.incident]"><br>
+        ReleaseDate:<br>
+        <input type="date" ng-model="newPrisoner[prisonerModel.releaseDate]"><br>
+        Cell:<br>
+        <select ng-model="newPrisoner[prisonerModel.cellId]" ng-options="x[cellModel.id] as x[cellModel.id] for x in cells"></select>
+        <br><br>
+    </form>
+    <button ng-if="!isEditing" ng-click="submitNewPrisoner()">
+        Add
+    </button>
+    <button ng-if="isEditing" ng-click="submitNewPrisoner()">
+        Save
+    </button>
+    <button ng-click="cancelNewPrisoner()">
+        Cancel
+    </button>
+</div>
+<div>
+    <table id="prisonerList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                ID
+            </td>
+            <td>
+                NAME
+            </td>
+            <td>
+                INCIDENT
+            </td>
+            <td>
+                CELL
+            </td>
+            <td>
+                PRISONED AT
+            </td>
+            <td>
+                RELEASE DATA
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </thead>
+        <tbody ng-repeat="i in prisoners track by i.id">
+            <tr>
+                <td>{{i[prisonerModel.id]}}</td>
+                <td>{{i[prisonerModel.prisonerName]}}</td>
+                <td>{{i[prisonerModel.incident]}}</td>
+                <td>{{i[prisonerModel.cellId]}}</td>
+                <td>{{i[prisonerModel.placeDate] | date:'short'}}</td>
+                <td>{{i[prisonerModel.releaseDate] | date:'short' }}</td>
+                <td>
+                    <button ng-click="editPrisoner(i[prisonerModel.id])">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="deletePrisoner(i[prisonerModel.id])">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+    </table>
+</div>

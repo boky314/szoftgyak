@@ -1,6 +1,7 @@
 package glavny.inf.elte.hu.rest;
 
 
+import glavny.inf.elte.hu.data.Area;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
 import glavny.inf.elte.hu.data.Prisoner;
@@ -37,7 +38,9 @@ public class PrisonerManager {
     @GetMapping("/")
     public  ResponseEntity<List<Prisoner>> getPrisoners(Authentication auth)
     {
-        return findPrisonerWithReleaseDate(System.currentTimeMillis(), auth);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        List<Prisoner> result = prisonerRepository.findPrisonerByReleaseDateAfter(timestamp);
+        return new ResponseEntity<List<Prisoner>>(result, HttpStatus.OK);
     }
     @GetMapping("/release_date/{time_stamp}")
     public ResponseEntity<List<Prisoner>> findPrisonerWithReleaseDate(@PathVariable("time_stamp") Long time, Authentication auth)
@@ -98,5 +101,13 @@ public class PrisonerManager {
         prisonerRepository.save(r);
 
         return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deletePrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder) {
+        prisonerRepository.delete(p);
+
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 }
