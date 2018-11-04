@@ -1,6 +1,7 @@
 package glavny.inf.elte.hu.rest;
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class PrisonCellManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.CREATE, c.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
         
         boolean flag = true;
 
@@ -109,7 +110,7 @@ public class PrisonCellManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.DELETE, c.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
         
         boolean flag = true;
         if (c.getPrisoners().size() > 0) {

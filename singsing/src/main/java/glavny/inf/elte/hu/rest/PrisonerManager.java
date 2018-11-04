@@ -85,7 +85,7 @@ public class PrisonerManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner b, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.CREATE, b.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", b.toString()));
         
         boolean flag = true;
         Prisoncell c = prisoncellRepository.getOne(b.getCellId());
@@ -109,7 +109,7 @@ public class PrisonerManager {
     @PostMapping("/save")
     public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner r, Principal principal)
     {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.MODIFY, r.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", r.toString()));
         
         Prisoncell c = prisoncellRepository.getOne(r.getCellId());
         if(c.getPrisoners().size() >=  c.getSpace())

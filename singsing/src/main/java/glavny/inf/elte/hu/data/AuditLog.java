@@ -1,5 +1,7 @@
 package glavny.inf.elte.hu.data;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="audit")
+@Table(name="auditlog")
 public class AuditLog {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,20 +24,24 @@ public class AuditLog {
 
     @Basic
     @Column(name = "DATETIME")
-    private long datetime;
+    private Timestamp dateTime;
     
     @Basic
-    @Column(name = "TYPE")
-    private ChangeType type;
+    @Column(name = "CHANGETYPE")
+    private String changeType;
     
     @Basic
     @Column(name = "CHANGE")
     private String change;
     
-    public AuditLog(String user, long datetime, ChangeType type, String change) {
+    public AuditLog()
+    {
+    	
+    }
+    public AuditLog(String user, Timestamp dateTime, String changeType, String change) {
         setUser(user);
-        setDatetime(datetime);
-        setType(type);
+        setDateTime(dateTime);
+        setChangeType(changeType);
         setChange(change);
     }
     
@@ -55,20 +61,20 @@ public class AuditLog {
         this.user = user;
     }
     
-    public long getDatetime() {
-        return datetime;
+    public Timestamp getDateTime() {
+        return dateTime;
     }
     
-    public void setDatetime(long datetime) {
-        this.datetime = datetime;
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
     }
     
-    public ChangeType getType() {
-        return type;
+    public String getChangeType() {
+        return changeType;
     }
     
-    public void setType(ChangeType type) {
-        this.type = type;
+    public void setChangeType(String changeType) {
+        this.changeType = changeType;
     }
     
     public String getChange() {
@@ -84,14 +90,19 @@ public class AuditLog {
         final int prime = 31;
         long result = 1;
         result = prime * result + ((change == null) ? 0 : change.hashCode());
-        result = prime * result + datetime;
+        result = prime * result + dateTime.hashCode();
         result = prime * result + id;
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + ((changeType == null) ? 0 : changeType.hashCode());
         result = prime * result + ((user == null) ? 0 : user.hashCode());
         return (int) result;
     }
 
     @Override
+	public String toString() {
+		return "AuditLog [id=" + id + ", user=" + user + ", dateTime=" + dateTime + ", changeType=" + changeType
+				+ ", change=" + change + "]";
+	}
+	@Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -105,11 +116,11 @@ public class AuditLog {
                 return false;
         } else if (!change.equals(other.change))
             return false;
-        if (datetime != other.datetime)
+        if (dateTime != other.dateTime)
             return false;
         if (id != other.id)
             return false;
-        if (type != other.type)
+        if (changeType != other.changeType)
             return false;
         if (user == null) {
             if (other.user != null)
