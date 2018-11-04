@@ -1,0 +1,66 @@
+<div>
+    <h1 ng-if="!isEditing">Add new cell</h1>
+    <h1 ng-if="isEditing">Edit cell</h1>
+    <form name="cellForm">
+        Descriptiom:<br>
+        <input type="text" ng-model="newCell[cellModel.cellDescription]"><br>
+        Space:<br>
+        <input type="number" ng-model="newCell[cellModel.space]"><br>
+        Floor:<br>
+        <input type="number" ng-model="newCell[cellModel.floor]"><br>
+        Area:<br>
+        <select ng-model="newCell[cellModel.areaId]" ng-options="x[areaModel.id] as x[areaModel.name] for x in areas"></select><br>
+        <br>
+        <button ng-disabled="cellForm.$invalid" ng-click="submitNewCell()">
+            <span ng-if="!isEditing">Add</span>
+            <span ng-if="isEditing">Save</span>
+        </button>
+        <button ng-click="cancelNewCell()">
+            Cancel
+        </button>
+    </form>
+</div>
+<hr />
+<div>
+    <table id="cellList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                ID
+            </td>
+            <td>
+                SPACE
+            </td>
+            <td>
+                FLOOR
+            </td>
+            <td>
+                DESCRIPTION
+            </td>
+            <td>
+                AREA
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in cells track by i[cellModel.id]">
+                <td>{{i[cellModel.id]}}</td>
+                <td>{{i[cellModel.space]}}</td>
+                <td>{{i[cellModel.floor]}}</td>
+                <td>{{i[cellModel.cellDescription]}}</td>
+                <td>{{i.areaName}}</td>
+                <td>
+                    <button ng-click="editCell(i[cellModel.id])">
+                        Edit
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="deleteCell(i[cellModel.id])">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+    </table>
+</div>
