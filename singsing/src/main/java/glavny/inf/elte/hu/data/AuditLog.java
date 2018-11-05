@@ -38,6 +38,7 @@ public class AuditLog {
     {
     	
     }
+  
     public AuditLog(String user, Timestamp dateTime, String changeType, String change) {
         setUser(user);
         setDateTime(dateTime);
@@ -97,13 +98,13 @@ public class AuditLog {
         return (int) result;
     }
 
-    @Override
+  @Override
 	public String toString() {
 		return "AuditLog [id=" + id + ", user=" + user + ", dateTime=" + dateTime + ", changeType=" + changeType
 				+ ", change=" + change + "]";
 	}
 	@Override
-    public boolean equals(Object obj) {
+  public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -116,6 +117,7 @@ public class AuditLog {
                 return false;
         } else if (!change.equals(other.change))
             return false;
+    
         if (dateTime != other.dateTime)
             return false;
         if (id != other.id)

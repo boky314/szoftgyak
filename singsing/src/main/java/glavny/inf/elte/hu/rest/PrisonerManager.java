@@ -116,6 +116,7 @@ public class PrisonerManager {
         auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toStringForLog()));
         
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
+  
         if(c.getPrisoners().size() >=  c.getSpace())
         {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);

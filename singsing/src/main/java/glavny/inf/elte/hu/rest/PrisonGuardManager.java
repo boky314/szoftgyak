@@ -44,7 +44,7 @@ public class PrisonGuardManager {
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
         auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE", guard.toString()));
-  
+
         prisonGuardRepository.save(guard);
 
         HttpHeaders headers = new HttpHeaders();
