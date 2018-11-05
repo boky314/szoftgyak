@@ -3,7 +3,6 @@ package glavny.inf.elte.hu.rest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,25 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import glavny.inf.elte.hu.data.Area;
+import glavny.inf.elte.hu.data.AreaRepository;
 import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
-import glavny.inf.elte.hu.data.ChangeType;
-import glavny.inf.elte.hu.data.Prisoncell;
-import glavny.inf.elte.hu.data.PrisoncellRepository;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
 
@@ -53,9 +44,6 @@ public class PrisonCellManager {
 
     @Autowired
     private AreaRepository areaRepository;
-    
-    @Autowired
-    private AuditLogRepository auditLogRepository;
 
     @GetMapping("/")
     public ResponseEntity<List<Prisoncell>> getPrisonCells(Authentication auth) {

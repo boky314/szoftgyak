@@ -121,12 +121,6 @@ public class Prisoncell implements Serializable {
     public String toStringForLog() {
         return "Prisoncell [description=" + cellDesc + ", area=" +area+ "]";
     }
-  
-    @Override
-    public String toString() {
-        return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
-                + "]";
-    }
     
     @Override
     public String toString() {
