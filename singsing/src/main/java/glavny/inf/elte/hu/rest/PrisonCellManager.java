@@ -71,7 +71,7 @@ public class PrisonCellManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toStringForLog()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
         
         boolean flag = true;
 
@@ -90,7 +90,7 @@ public class PrisonCellManager {
     @PutMapping("/update")
     public ResponseEntity<Void> updatePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder) {
     	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "MODIFY", c.toStringForLog()));
+        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "MODIFY", c.toString()));
         Area area = areaRepository.getOne(c.getAreaId());
         c.setArea(area);
 
@@ -102,7 +102,7 @@ public class PrisonCellManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toStringForLog()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
         
         boolean flag = true;
         if (c.getPrisoners().size() > 0) {

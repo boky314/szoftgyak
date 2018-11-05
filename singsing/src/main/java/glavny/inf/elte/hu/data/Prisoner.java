@@ -114,8 +114,4 @@ public class Prisoner {
         return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
                 + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + ", cell=" + cell + "]";
     }
-
-    public String toStringForLog() {
-        return "Prisoner [prisonerName=" + prisonerName + ", incident=" + incident + "]";
-    }
 }

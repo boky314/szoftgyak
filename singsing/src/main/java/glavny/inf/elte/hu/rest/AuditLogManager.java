@@ -26,9 +26,7 @@ public class AuditLogManager {
     @GetMapping("/")
     public  ResponseEntity<List<AuditLog>> getLogs(Authentication auth)
     {
-    	//System.out.println("MIVAN------");
         List<AuditLog> result = auditLogRepository.findAll();
-        //System.out.println("------------->"+result.toString());
         return new ResponseEntity<List<AuditLog>>(result, HttpStatus.OK);
     }
 }

@@ -88,7 +88,7 @@ public class PrisonerManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", p.toStringForLog()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", p.toString()));
         
         boolean flag = true;
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
@@ -113,7 +113,7 @@ public class PrisonerManager {
     public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner p, Principal principal)
     {
     
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toStringForLog()));
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toString()));
         
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
   
@@ -130,7 +130,7 @@ public class PrisonerManager {
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder) {
     	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "DELETE", p.toStringForLog()));
+        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "DELETE", p.toString()));
         prisonerRepository.delete(p);
 
         HttpHeaders headers = new HttpHeaders();
