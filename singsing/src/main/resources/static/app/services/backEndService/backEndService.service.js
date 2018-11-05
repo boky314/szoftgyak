@@ -159,7 +159,18 @@ angular.
                     errorCallback(error);
                 });
             };
+            
+            this.getLogs = function (successCallback, errorCallback) {
 
+                $http.get("/auditlog/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+      
             this.createGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/new", guard).then(

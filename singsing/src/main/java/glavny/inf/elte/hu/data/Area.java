@@ -35,4 +35,9 @@ public class Area {
     public void setName(String name) {
         this.name = name;
     }
+
+
+	public String toStringForLog() {
+		return "Area [name=" + name + "]";
+	}
 }

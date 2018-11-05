@@ -21,6 +21,9 @@ angular.
         when('/guards', {
           template: '<guards></guards>'
         }).
+        when('/logs', {
+          template: '<logs></logs>'
+        }).
         otherwise('/home');
 
       $locationProvider.html5Mode(true);

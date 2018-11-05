@@ -1,0 +1,35 @@
+<div>
+      <h1>Show logs</h1>
+</div>
+<hr />
+<div>
+
+  <button ng-click="download()">Download</button>
+   <table id="logList_table" class="table table-condensed table-bordered table-striped">
+   
+        <thead>
+            <thead>
+            <td>
+                USER
+            </td>
+            <td>
+                DATE
+            </td>
+            <td>
+                TYPE
+            </td>
+            <td>
+                CHANGE
+            </td>
+        	</thead>
+        </thead>
+         <tbody ng-repeat="i in logs">
+            <tr>
+                <td>{{i.user}}</td>
+                <td>{{i.dateTime}}</td>
+                <td>{{i.changeType}}</td>
+                <td>{{i.change}}</td>
+            </tr>
+      
+    </table>
+</div>

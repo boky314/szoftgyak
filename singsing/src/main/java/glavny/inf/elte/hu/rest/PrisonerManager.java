@@ -5,6 +5,13 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import glavny.inf.elte.hu.data.Area;
+import glavny.inf.elte.hu.data.Prisoncell;
+import glavny.inf.elte.hu.data.PrisoncellRepository;
+import glavny.inf.elte.hu.data.Prisoner;
+import glavny.inf.elte.hu.data.PrisonerRepository;
+import glavny.inf.elte.hu.data.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,19 +87,19 @@ public class PrisonerManager {
 
 
     @PostMapping("/new")
-    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner b, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.CREATE, b.toString()));
+    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder, Principal principal) {
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", p.toStringForLog()));
         
         boolean flag = true;
-        Prisoncell c = prisoncellRepository.getOne(b.getCellId());
+        Prisoncell c = prisoncellRepository.getOne(p.getCellId());
         if(c.getPrisoners().size() >=  c.getSpace())
         {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
-        b.setCell(c);
-        b.setPlaceDate(new Timestamp(System.currentTimeMillis()));
+        p.setCell(c);
+        p.setPlaceDate(new Timestamp(System.currentTimeMillis()));
 
-        prisonerRepository.save(b);
+        prisonerRepository.save(p);
         if (flag == false) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
@@ -101,23 +110,27 @@ public class PrisonerManager {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner r, Principal principal)
+    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner p, Principal principal)
     {
-        auditLogRepository.save(new AuditLog(principal.getName(), System.currentTimeMillis(), ChangeType.MODIFY, r.toString()));
+    
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toStringForLog()));
         
-        Prisoncell c = prisoncellRepository.getOne(r.getCellId());
+        Prisoncell c = prisoncellRepository.getOne(p.getCellId());
+  
         if(c.getPrisoners().size() >=  c.getSpace())
         {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
-        r.setCell(c);
-        prisonerRepository.save(r);
+        p.setCell(c);
+        prisonerRepository.save(p);
 
         return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder) {
+    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "DELETE", p.toStringForLog()));
         prisonerRepository.delete(p);
 
         HttpHeaders headers = new HttpHeaders();
