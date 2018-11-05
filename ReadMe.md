@@ -1,5 +1,5 @@
 ### Fordítás 
-`mvn package`
+`mvn clean package`
 
 ### Futtatás
 `java -jar target/singsing-0.0.1-SNAPSHOT.jar`
