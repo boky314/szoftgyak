@@ -23,7 +23,7 @@ angular.
 
         loadLogs();
         
-        var initDatatable = function () {
+		var initDatatable = function () {
          
             setTimeout(function () {
 
@@ -33,6 +33,36 @@ angular.
             
           };
 	 	  
-      }
+	
+      
+		$scope.download = function () {
+			loadLogs();
+		var csv = 'User,Date,Type,Change\n';
+		
+		
+		
+    	$scope.logs.forEach(function(row) {
+            csv += row.user + ",";
+            csv += row.dateTime + ",";
+            csv += row.changeType + ",";
+            csv += row.change;
+            csv += "\n";
+   		 });
+    	
+    	
+    	
+    	
+    	
+    	var hiddenElement = document.createElement('a');
+    	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    	hiddenElement.target = '_blank';
+    	hiddenElement.download = 'people.csv';
+    	hiddenElement.click();
+		
+		
+		
+				
+        };
+		}
     ]
   });

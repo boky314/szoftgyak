@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +81,7 @@ public class PrisonCellManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toStringForLog()));
         
         boolean flag = true;
 
@@ -98,7 +99,8 @@ public class PrisonCellManager {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updatePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder) {
-
+    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "MODIFY", c.toStringForLog()));
         Area area = areaRepository.getOne(c.getAreaId());
         c.setArea(area);
 
@@ -110,7 +112,7 @@ public class PrisonCellManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toStringForLog()));
         
         boolean flag = true;
         if (c.getPrisoners().size() > 0) {
