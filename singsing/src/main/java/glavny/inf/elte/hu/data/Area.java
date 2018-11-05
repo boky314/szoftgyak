@@ -37,7 +37,8 @@ public class Area {
     }
 
 
-	public String toStringForLog() {
-		return "Area [name=" + name + "]";
-	}
+	@Override
+    public String toString() {
+        return "Area [id=" + id + ", name=" + name + "]";
+    }
 }
