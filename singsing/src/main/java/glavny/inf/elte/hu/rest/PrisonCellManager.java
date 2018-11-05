@@ -36,6 +36,9 @@ public class PrisonCellManager {
 
     @Autowired
     private PrisoncellRepository prisoncellRepository;
+    
+    @Autowired
+    private AuditLogRepository auditLogRepository;
 
     @Autowired
     private AreaRepository areaRepository;

@@ -123,4 +123,10 @@ public class Prisoncell implements Serializable {
         return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
                 + "]";
     }
+    
+    @Override
+    public String toString() {
+        return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
+                + "]";
+    }
 }
