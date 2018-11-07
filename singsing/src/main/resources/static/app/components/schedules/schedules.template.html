@@ -1,0 +1,57 @@
+<div>
+    <div>
+        Select week:
+        <select ng-model="week" ng-options="n for n in [1,2,3,4]" ng-init="week = 1"></select>
+
+        <table style="width:100%">
+            <tr>
+                <th>Guard Name</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+            <tr ng-repeat=" guardTimeTable in schedule" style="height:100%">
+                <td>{{ guardTimeTable.guard.prisonGuardName}}</td>
+                <td ng-repeat=" dayOfWeek in guardTimeTable.workTime[week-1]">
+                    <!--{{dayOfWeek.length}}-->
+                    <div>
+                        <div ng-repeat=" shift in dayOfWeek" style=" border: 1px solid black;">
+                            <p>{{ shift.areaName}} {{ shift.level}} lv</p>
+                            <p>Shift: {{ shift.start}}h - {{ shift.end}}h </p>
+                            <p ng-show="shift.extraWork">Extra work</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <p ng-show="totalExtraWork>0">
+        Total extra work: {{totalExtraWork}}
+    </p>
+    <div ng-show="totalExtraWork>0">
+        <table style="width:100%">
+            <tr>
+                <th>Guard Name</th>
+                <th>Week 1</th>
+                <th>Week 2</th>
+                <th>Week 3</th>
+                <th>Week 1</th>
+            </tr>
+            <tr ng-repeat=" guardTimeTable in schedule">
+                <td>{{ guardTimeTable.guard.prisonGuardName}}</td>
+                <!--<td ng-repeat = " extra in guardTimeTable.extraWorkPerWeek">{{ extra }}</td>-->
+                <td>{{guardTimeTable.extraWorkPerWeek[0]}}</td>
+                <td>{{guardTimeTable.extraWorkPerWeek[1]}}</td>
+                <td>{{guardTimeTable.extraWorkPerWeek[2]}}</td>
+                <td>{{guardTimeTable.extraWorkPerWeek[3]}}</td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <br>
+</div>

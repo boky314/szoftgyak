@@ -184,7 +184,7 @@ angular.
             };
 
             this.getSchedule = function (successCallback, errorCallback) {
-                $http.get("/timetable/").then(function (result) {
+                $http.get("/schedule/").then(function (result) {
 
                     successCallback(result);
                 }, function (error) {

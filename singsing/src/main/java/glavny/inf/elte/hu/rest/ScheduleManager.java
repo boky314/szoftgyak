@@ -23,10 +23,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("timetable")
+@RequestMapping("schedule")
 @Transactional
-public class TimeTableManager {
-    private static Logger log = LoggerFactory.getLogger(UserManager.class);
+public class ScheduleManager {
+    private static Logger log = LoggerFactory.getLogger(ScheduleManager.class);
 
     @Autowired
     private PrisoncellRepository prisoncellRepository; //TODO get all space where we need guard method
@@ -37,7 +37,7 @@ public class TimeTableManager {
 
 
     @GetMapping("/")
-    ResponseEntity<List<GuardTimeTable>> getTimetable(Authentication auth)
+    ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth)
     {
         List<GuardedAreaDTO> guardedAreas = findGuardedAreas();
         List<PrisonGuard> gourds =  prisonGuardRepository.findAll();
@@ -144,7 +144,8 @@ public class TimeTableManager {
         Optional<Area> byId = areaRepository.findById(ga.getAreaID());
         if(!byId.isPresent())
             return false;
-        Set<Prisoncell> prisonCells = byId.get().getPrisonCells().stream().filter(e-> ga.getLevel() == e.getFloor()).collect(Collectors.toSet());
+        Set<Prisoncell> prisonCells =
+                byId.get().getPrisonCells().stream().filter(e-> ga.getLevel() == e.getFloor()).collect(Collectors.toSet());
         for(Prisoncell cell : prisonCells)
         {
             Set<Prisoner> prisoners = cell.getPrisoners();

@@ -21,8 +21,8 @@ angular.
         when('/guards', {
           template: '<guards></guards>'
         }).
-        when('/schedule', {
-          template: '<schedule></schedule>'
+        when('/schedules', {
+          template: '<schedules></schedules>'
         }).
         otherwise('/home');
 
