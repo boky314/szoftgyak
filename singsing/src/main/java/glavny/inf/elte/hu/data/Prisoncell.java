@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "prisoncell")
 public class Prisoncell implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -117,11 +116,11 @@ public class Prisoncell implements Serializable {
     public void setArea(Area area) {
         this.area = area;
     }
-    
+
     @Override
     public String toString() {
         String prisoners = "[";
-        for (Prisoner prisoner: this.prisoners) {
+        for (Prisoner prisoner : this.prisoners) {
             prisoners += "id=" + prisoner.getId() + " ";
         }
         prisoners += "]";

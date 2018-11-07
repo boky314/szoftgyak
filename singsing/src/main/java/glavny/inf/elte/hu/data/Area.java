@@ -16,6 +16,10 @@ public class Area {
     @Column(name = "NAME")
     private String name;
 
+    @Basic
+    @Column(name = "SECURITY_LEVEL")
+    private String areaSecurity;
+
     public int getId() {
         return id;
     }
@@ -32,6 +36,14 @@ public class Area {
         this.name = name;
     }
 
+    public String getAreaSecurity() {
+        return areaSecurity;
+    }
+
+    public void setAreaSecurity(String areaSecurity) {
+        this.areaSecurity = areaSecurity;
+    }
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "area")
     private Set<Prisoncell> prisonCells = new HashSet<>(0);
 
@@ -39,8 +51,8 @@ public class Area {
         return prisonCells;
     }
 
-	  @Override
+    @Override
     public String toString() {
-        return "Area [id=" + id + ", name=" + name + "]";
+        return "Area [id=" + id + ", name=" + name + ", areaSecurity=" + areaSecurity + "]";
     }
 }

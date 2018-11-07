@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import java.sql.Timestamp;
+import java.util.List;
 import glavny.inf.elte.hu.data.Area;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
@@ -43,7 +45,7 @@ import glavny.inf.elte.hu.data.PrisonerRepository;
 @RequestMapping("prisoner")
 @Transactional
 public class PrisonerManager {
-    private static Logger log = LoggerFactory.getLogger(UserManager.class);
+    private static Logger log = LoggerFactory.getLogger(PrisonerManager.class);
 
     @Autowired
     private PrisonerRepository prisonerRepository;

@@ -1,3 +1,9 @@
+<div id="cellError" style="display:none">
+    Prisoner and cell security level not match:
+    <ul>
+        {{requiredSecurity}}
+    </ul>
+</div>
 <div>
     <h1 ng-if="!isEditing">Add new prisoner</h1>
     <h1 ng-if="isEditing">Edit prisoner</h1>
@@ -9,7 +15,10 @@
         ReleaseDate:<br>
         <input type="date" ng-model="newPrisoner[prisonerModel.releaseDate]"><br>
         Cell:<br>
-        <select ng-model="newPrisoner[prisonerModel.cellId]" ng-options="x[cellModel.id] as x[cellModel.id] for x in cells"></select>
+        <select id="cell" ng-model="newPrisoner[prisonerModel.cellId]" ng-options="x[cellModel.id] as x[cellModel.id] for x in cells"></select>
+        <br>
+           Security Level:<br>
+        <select id="securityLevel" ng-model="security.selectedSecurity" ng-options="securityLvl.name for securityLvl in security.availableSecurity track by securityLvl.name" ng-change="addSecurityLevel(security.selectedSecurity.name)" ></select><br>
         <br><br>
         <button ng-disabled="prisonerForm.$invalid" ng-click="submitNewPrisoner()">
             <span ng-if="!isEditing">Add</span>
@@ -20,6 +29,7 @@
         </button>
     </form>
 </div>
+
 <div>
     <table id="prisonerList_table" class="table table-condensed table-bordered table-striped">
         <thead>
@@ -28,6 +38,9 @@
             </td>
             <td>
                 NAME
+            </td>
+			<td>
+                SECURITY LEVEL
             </td>
             <td>
                 INCIDENT
@@ -50,6 +63,7 @@
             <tr>
                 <td>{{i[prisonerModel.id]}}</td>
                 <td>{{i[prisonerModel.prisonerName]}}</td>
+				<td>{{i[prisonerModel.prisonerSecurity]}}</td>
                 <td>{{i[prisonerModel.incident]}}</td>
                 <td>{{i[prisonerModel.cellId]}}</td>
                 <td>{{i[prisonerModel.placeDate] | date:'short'}}</td>

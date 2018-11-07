@@ -28,7 +28,7 @@ angular.
             console.log(error);
           });
         };
-
+        
         var loadAreas = function () {
           BackEndService.getAreas(function (result) {
 
@@ -74,7 +74,8 @@ angular.
           $scope.isEditing = false;
           $scope.newCell = {};
         };
-
+        
+        
         $scope.submitNewCell = function () {
 
           if ($scope.cells.findIndex(a => a.id === $scope.newCell.id) > -1) {

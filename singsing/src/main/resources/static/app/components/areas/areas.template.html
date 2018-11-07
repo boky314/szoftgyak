@@ -3,7 +3,9 @@
     <h1 ng-if="isEditing">Edit area</h1>
     <form name="areaForm">
         Name:<br>
-        <input id="areaName" type="text" ng-model="newArea[areaModel.name]" required>
+        <input id="areaName" type="text" ng-model="newArea[areaModel.name]" required><br>
+          Security Level:<br>
+        <select ng-model="security.selectedSecurity" ng-options="securityLvl.name for securityLvl in security.availableSecurity track by securityLvl.name" ng-change="addSecurityLevel(security.selectedSecurity.name)"></select><br>
         <br>
         <button type="submit" ng-disabled="areaForm.$invalid" ng-click="submitNewArea()">
             <span ng-if="!isEditing">Add</span>
@@ -25,6 +27,9 @@
                 NAME
             </td>
             <td>
+                SECURITY
+            </td>
+            <td>
             </td>
             <td>
             </td>
@@ -33,6 +38,7 @@
             <tr ng-repeat="i in areas track by i[areaModel.id]">
                 <td>{{i[areaModel.id]}}</td>
                 <td>{{i[areaModel.name]}}</td>
+                <td>{{i[areaModel.areaSecurity]}}</td>
                 <td>
                     <button ng-click="editArea(i[areaModel.id])">
                         Edit
