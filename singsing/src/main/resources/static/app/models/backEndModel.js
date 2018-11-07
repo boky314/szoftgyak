@@ -9,7 +9,8 @@ angular.
 
                 area: {
                     id: "id",
-                    name: "name"
+                    name: "name",
+                    areaSecurity : "areaSecurity"
                 },
 
                 prisoncell: {

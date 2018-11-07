@@ -13,9 +13,11 @@ angular.
         $scope.newPrisoner = {};
         $scope.prisoners = [];
         $scope.cells = [];
-        $scope.cellSecurityModel = {};
+        $scope.areas = [];
+        $scope.areaModel = BackEndModel.area;
         $scope.prisonerModel = BackEndModel.prisoner;
         $scope.cellModel = BackEndModel.prisoncell;
+        $scope.cellSecurityModel = {};
         $scope.newPrisoner.prisonerSecurity = 'Regular';
         
         var loadCells = function () {
@@ -41,11 +43,25 @@ angular.
             initDatatable();
           });
         };
+        
+        var loadAreas = function () {
+            BackEndService.getAreas(function (result) {
 
+              $scope.areas = result.data;
+              loadCells();
+            }, function (error) {
+
+              $scope.areas = [];
+              console.log(error);
+            });
+          };
+          
+          
+        loadAreas();
         loadPrisoners();
         loadCells();
-
-        var initDatatable = function () {
+        
+          var initDatatable = function () {
 
           setTimeout(function () {
 
@@ -76,29 +92,33 @@ angular.
           }.bind($scope);
           
         var validatePrisoner =  function (){
+        	var areaSecurityLevel;
+        	
+        	$scope.cellSecurityModel = $scope.cells[$scope.newPrisoner.cellId - 1];
+        	$scope.areaModel = $scope.areas[$scope.cellSecurityModel.areaId - 1];
+          	var areaSecurityLevel = $scope.areaModel.areaSecurity;        
+        	
           	var prisonerLevelValue = $scope.newPrisoner.prisonerSecurity;
-          	          	            
-          	$scope.cellSecurityModel = $scope.cells[$scope.newPrisoner.cellId - 1];
-          	var cellModelSecurityLevel = $scope.cellSecurityModel.prisonCellSecurity;          	         	
+               
+          	
+            console.log('Area security '+ $scope.areaModel.areaSecurity);
           	
           	var messageText = $('#requiredSecurity');
           	var cellErrorBody = $('#cellError');
-          	
-     	    
           	
           	 if(prisonerLevelValue == 'Regular'){
           		 console.log('It ok, regular');
           		 cellErrorBody.hide();
                  return true;
-             }else if(prisonerLevelValue == 'Dangerous' && cellModelSecurityLevel == 'Medium'){
+             }else if(prisonerLevelValue == 'Dangerous' && areaSecurityLevel == 'Medium'){
             	 console.log('Its not ok');
-            	 $scope.requiredSecurity = 'Required Cell security level is= High or Priority';
+            	 $scope.requiredSecurity = 'Required Area security level is= High or Priority';
            	  	 cellErrorBody.show();
                  return false;
              }
-             else if(prisonerLevelValue == 'Violent' && cellModelSecurityLevel != 'Priority'){
+             else if(prisonerLevelValue == 'Violent' && areaSecurityLevel != 'Priority'){
             	 console.log('Its not ok, Violent!!');
-            	 $scope.requiredSecurity = 'Required Cell security level is = Priority';
+            	 $scope.requiredSecurity = 'Required Area security level is = Priority';
            	     cellErrorBody.show();
                  return false;
              }
@@ -106,7 +126,7 @@ angular.
            	  cellErrorBody.hide();
                  return true;
              }
-           }
+           };
         
         $scope.submitNewPrisoner = function () {
         	

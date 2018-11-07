@@ -11,28 +11,43 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "area")
 public class Area {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
+	private int id;
 
-    @Basic
-    @Column(name = "NAME")
-    private String name;
+	@Basic
+	@Column(name = "NAME")
+	private String name;
 
-    public int getId() {
-        return id;
-    }
+	@Basic
+	@Column(name = "SECURITY_LEVEL")
+	private String areaSecurity;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAreaSecurity() {
+		return areaSecurity;
+	}
+
+	public void setAreaSecurity(String areaSecurity) {
+		this.areaSecurity = areaSecurity;
+	}
+
+	
+
 }

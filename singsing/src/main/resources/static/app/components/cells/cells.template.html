@@ -8,8 +8,6 @@
         <input type="number" ng-model="newCell[cellModel.space]"><br>
         Floor:<br>
         <input type="number" ng-model="newCell[cellModel.floor]"><br>
-        Security Level:<br>
-        <select ng-model="security.selectedSecurity" ng-options="securityLvl.name for securityLvl in security.availableSecurity track by securityLvl.name" ng-change="addSecurityLevel(security.selectedSecurity.name)"></select><br>
         Area:<br>
         <select ng-model="newCell[cellModel.areaId]" ng-options="x[areaModel.id] as x[areaModel.name] for x in areas"></select><br>
         <br>
@@ -36,9 +34,6 @@
                 FLOOR
             </td>
             <td>
-             SECURITY LEVEL
-            </td>
-            <td>
                 DESCRIPTION
             </td>
             <td>
@@ -54,7 +49,6 @@
                 <td>{{i[cellModel.id]}}</td>
                 <td>{{i[cellModel.space]}}</td>
                 <td>{{i[cellModel.floor]}}</td>
-                <td>{{i[cellModel.prisonCellSecurity]}}</td>
                 <td>{{i[cellModel.cellDescription]}}</td>
                 <td>{{i.areaName}}</td>
                 <td>

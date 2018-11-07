@@ -45,10 +45,6 @@ public class Prisoncell implements Serializable {
 	@Column(name = "FLOOR")
 	private int floor;
 
-	@Basic
-	@Column(name = "SECURITY_LEVEL")
-	private String prisonCellSecurity;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
 	private Set<Prisoner> prisoners = new HashSet<>(0);
 
@@ -94,14 +90,6 @@ public class Prisoncell implements Serializable {
 
 	public void setFloor(int floor) {
 		this.floor = floor;
-	}
-
-	public String getPrisonCellSecurity() {
-		return prisonCellSecurity;
-	}
-
-	public void setPrisonCellSecurity(String prisonCellSecurity) {
-		this.prisonCellSecurity = prisonCellSecurity;
 	}
 
 	@Override
