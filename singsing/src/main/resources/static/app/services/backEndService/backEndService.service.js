@@ -150,7 +150,6 @@ angular.
             };
 
             this.getGuards = function (successCallback, errorCallback) {
-
                 $http.get("/prisonguard/").then(function (result) {
 
                     successCallback(result);
@@ -197,6 +196,16 @@ angular.
             this.deleteGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/delete", guard).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.getSchedule = function (successCallback, errorCallback) {
+                $http.get("/schedule/").then(function (result) {
 
                     successCallback(result);
                 }, function (error) {

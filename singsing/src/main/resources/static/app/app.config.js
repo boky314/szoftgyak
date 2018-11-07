@@ -21,6 +21,9 @@ angular.
         when('/guards', {
           template: '<guards></guards>'
         }).
+        when('/schedules', {
+          template: '<schedules></schedules>'
+        }).
         when('/logs', {
           template: '<logs></logs>'
         }).
