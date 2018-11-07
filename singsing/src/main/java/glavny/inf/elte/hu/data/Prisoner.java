@@ -112,6 +112,6 @@ public class Prisoner {
     @Override
     public String toString() {
         return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
-                + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + ", cell=" + cell + "]";
+                + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + "]";
     }
 }

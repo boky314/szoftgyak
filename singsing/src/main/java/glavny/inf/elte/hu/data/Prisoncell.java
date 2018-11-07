@@ -120,6 +120,11 @@ public class Prisoncell implements Serializable {
     
     @Override
     public String toString() {
+        String prisoners = "[";
+        for (Prisoner prisoner: this.prisoners) {
+            prisoners += "id=" + prisoner.getId() + " ";
+        }
+        prisoners += "]";
         return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
                 + "]";
     }

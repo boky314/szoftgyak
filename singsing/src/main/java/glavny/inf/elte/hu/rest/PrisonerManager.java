@@ -1,6 +1,5 @@
 package glavny.inf.elte.hu.rest;
 
-
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -54,21 +53,23 @@ public class PrisonerManager {
     private AuditLogRepository auditLogRepository;
 
     @GetMapping("/")
-    public  ResponseEntity<List<Prisoner>> getPrisoners(Authentication auth)
-    {
+    public ResponseEntity<List<Prisoner>> getPrisoners(Authentication auth) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         List<Prisoner> result = prisonerRepository.findPrisonerByReleaseDateAfter(timestamp);
         return new ResponseEntity<List<Prisoner>>(result, HttpStatus.OK);
     }
+
     @GetMapping("/release_date/{time_stamp}")
-    public ResponseEntity<List<Prisoner>> findPrisonerWithReleaseDate(@PathVariable("time_stamp") Long time, Authentication auth)
-    {
-        List<Prisoner> result = prisonerRepository.findPrisonerByReleaseDateBetween(new Timestamp(time),new Timestamp(Long.MAX_VALUE));
+    public ResponseEntity<List<Prisoner>> findPrisonerWithReleaseDate(@PathVariable("time_stamp") Long time,
+            Authentication auth) {
+        List<Prisoner> result = prisonerRepository.findPrisonerByReleaseDateBetween(new Timestamp(time),
+                new Timestamp(Long.MAX_VALUE));
         return new ResponseEntity<List<Prisoner>>(result, HttpStatus.OK);
     }
+
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<Prisoner>> findPrisonerWithName(@PathVariable("name") java.lang.String name, Authentication auth)
-    {
+    public ResponseEntity<List<Prisoner>> findPrisonerWithName(@PathVariable("name") java.lang.String name,
+            Authentication auth) {
         List<Prisoner> result = prisonerRepository.findPrisonerByPrisonerName(name);
         return new ResponseEntity<List<Prisoner>>(result, HttpStatus.OK);
     }
@@ -77,23 +78,21 @@ public class PrisonerManager {
     public ResponseEntity<Prisoner> findPrisoner(@PathVariable("id") Integer id, Authentication auth) {
 
         Prisoner b = prisonerRepository.findById(id).get();
-//		if(b == null) throw new ResourceNotFoundException( "Beteg "+taj+" not found"  );
-        if(auth.getAuthorities().contains(new SimpleGrantedAuthority("USER"))) {
-            throw new AccessDeniedException("No prisoner with ID: "+id);
+        // if(b == null) throw new ResourceNotFoundException( "Beteg "+taj+" not found"
+        // );
+        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("USER"))) {
+            throw new AccessDeniedException("No prisoner with ID: " + id);
         }
         b.getPrisonerName();
         return new ResponseEntity<Prisoner>(b, HttpStatus.OK);
     }
 
-
     @PostMapping("/new")
-    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", p.toString()));
-        
+    public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder,
+            Principal principal) {
         boolean flag = true;
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
-        if(c.getPrisoners().size() >=  c.getSpace())
-        {
+        if (c.getPrisoners().size() >= c.getSpace()) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         p.setCell(c);
@@ -104,21 +103,21 @@ public class PrisonerManager {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
 
+        auditLogRepository.save(
+                new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE", p.toString()));
         HttpHeaders headers = new HttpHeaders();
-        //headers.setLocation(builder.path("/{id}").buildAndExpand(b.getId()).toUri());
+        // headers.setLocation(builder.path("/{id}").buildAndExpand(b.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner p, Principal principal)
-    {
-    
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toString()));
-        
+    public ResponseEntity<Void> savePrisoner(@RequestBody Prisoner p, Principal principal) {
+        auditLogRepository.save(
+                new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toString()));
+
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
-  
-        if(c.getPrisoners().size() >=  c.getSpace())
-        {
+
+        if (c.getPrisoners().size() >= c.getSpace()) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         p.setCell(c);
@@ -129,8 +128,8 @@ public class PrisonerManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder) {
-    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "DELETE", p.toString()));
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user, new Timestamp(System.currentTimeMillis()), "DELETE", p.toString()));
         prisonerRepository.delete(p);
 
         HttpHeaders headers = new HttpHeaders();
