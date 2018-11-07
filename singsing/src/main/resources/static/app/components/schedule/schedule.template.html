@@ -1,0 +1,30 @@
+<div>
+    <select ng-model="week" ng-options="n for n in [1,2,3,4]" ng-init="week = 1"></select>
+
+
+    <table style="width:100%">
+        <tr>
+            <th>Guard Name</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+        </tr>
+        <tr ng-repeat=" guardTimeTable in schedule" style="height:100%">
+            <td>{{ guardTimeTable.guard.prisonGuardName}}</td>
+            <td ng-repeat=" dayOfWeek in guardTimeTable.workTime[week-1]">
+                <!--{{dayOfWeek.length}}-->
+                <div>
+                    <div ng-repeat=" shift in dayOfWeek" style=" border: 1px solid black;">
+                        <p>{{ shift.areaName}} {{ shift.level}} lv</p>
+                        <p>Shift: {{ shift.start}}h - {{ shift.end}}h </p>
+                        <p>Extra work: {{shift.extraWork}}</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

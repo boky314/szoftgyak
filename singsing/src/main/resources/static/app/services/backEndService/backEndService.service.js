@@ -149,6 +149,15 @@ angular.
                 });
             };
 
+            this.getSchedule = function (successCallback, errorCallback) {
+                $http.get("/timetable/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
 
             this.get = function (path) {
 

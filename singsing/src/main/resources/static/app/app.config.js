@@ -18,6 +18,9 @@ angular.
         when('/areas', {
           template: '<areas></areas>'
         }).
+        when('/schedule',{
+           template: '<schedule></schedule>'
+        }).
         otherwise('/home');
 
         $locationProvider.html5Mode(true);

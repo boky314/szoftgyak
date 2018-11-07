@@ -8,5 +8,6 @@ var app = angular.module('SingSingApp', [
   'cells',
   'prisoners',
   'areas',
+  'schedule',
   'backEndModel'
 ]);
