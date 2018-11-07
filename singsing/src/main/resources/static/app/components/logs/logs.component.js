@@ -21,6 +21,17 @@ angular.
             });
         };
 
+        var searchLogs = function (searchInput) {
+            BackEndService.searchLogs(searchInput, function (result) {
+                $scope.logs = result.data;
+                initDatatable();
+            }, function (error) {
+
+                $scope.logs = [];
+                console.log(error);
+            });
+        };
+
         loadLogs();
         
 		var initDatatable = function () {
@@ -37,32 +48,35 @@ angular.
       
 		$scope.download = function () {
 			loadLogs();
-		var csv = 'User,Date,Type,Change\n';
+            var csv = 'User,Date,Type,Change\n';
+            
+            $scope.logs.forEach(function(row) {
+                csv += row.user + ",";
+                csv += row.dateTime + ",";
+                csv += row.changeType + ",";
+                csv += row.change;
+                csv += "\n";
+            });
+            
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'people.csv';
+            hiddenElement.click();
 		
-		
-		
-    	$scope.logs.forEach(function(row) {
-            csv += row.user + ",";
-            csv += row.dateTime + ",";
-            csv += row.changeType + ",";
-            csv += row.change;
-            csv += "\n";
-   		 });
-    	
-    	
-    	
-    	
-    	
-    	var hiddenElement = document.createElement('a');
-    	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-    	hiddenElement.target = '_blank';
-    	hiddenElement.download = 'people.csv';
-    	hiddenElement.click();
-		
-		
-		
-				
         };
-		}
+
+        $scope.searchInput = '';
+
+		$scope.search = function () {
+            if(this.searchInput == ''){
+                loadLogs();
+            }else{
+                searchLogs(this.searchInput);
+            }		
+        };
+
+
+	  }
     ]
   });

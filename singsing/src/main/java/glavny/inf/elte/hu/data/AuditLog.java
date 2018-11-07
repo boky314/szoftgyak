@@ -1,5 +1,7 @@
 package glavny.inf.elte.hu.data;
 
+import org.hibernate.annotations.NamedQuery;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Basic;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@NamedQuery(name = "AuditLog.searchByString", query = "SELECT a FROM AuditLog a WHERE a.change LIKE CONCAT('%', ?1, '%') OR a.changeType LIKE CONCAT('%', ?1, '%') OR a.user LIKE CONCAT('%', ?1, '%')")
 @Table(name="auditlog")
 public class AuditLog {
     @Id
