@@ -38,6 +38,14 @@
                 },function (reason) { console.log(reason); });
             };
 
+            $scope.loadTimetable = function()
+            {
+                $http.get('/timetable/').then(function (res) {
+                    console.log(res.data);
+                    $scope.timetable = res.data;
+                },function (reason) { console.log(reason); });
+            };
+
             $scope.isCurrentPage = function(val){ return $scope.currentPage === val; };
             $scope.setCurrentPage = function (val) { $scope.currentPage = val;};
 
@@ -47,6 +55,7 @@
                 $scope.prisoners = null;
                 $scope.newCell = null;
                 $scope.newPrisoner = null;
+                $scope.timetable = null;
                 $scope.confirmationPageClear();
             };
 
@@ -65,6 +74,13 @@
                 $scope.currentPage = "guards";
                 $scope.loadGuards();
             };
+            $scope.loadTimetablePage = function ()
+            {
+                $scope.clearData();
+                $scope.currentPage = "timetable";
+                $scope.loadTimetable();
+            };
+
             $scope.prisonerOfCell = function(id)
             {
                 var prisoners  =  $scope.cells.filter(
@@ -292,6 +308,10 @@
         <button ng-click="loadGuardListPage()">
             Guards
         </button>
+        <button ng-click="loadTimetablePage()">
+            Timetable
+        </button>
+
         
         <div ng-show = "isCurrentPage('cells')">
             <Button ng-click="addCellPage()">
@@ -487,6 +507,11 @@
             <button ng-click = "confirmationOK()">OK</button>
             <button ng-click = "confirmationCancel()">Cancel</button>
         </div>
+
+        <div ng-show="isCurrentPage('timetable')" >
+            <p>Timetable</p>
+        </div>
+
     </div>
 </div>
 </body>

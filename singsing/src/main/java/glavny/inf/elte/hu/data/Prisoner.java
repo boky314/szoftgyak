@@ -18,118 +18,121 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "prisoner")
-public class Prisoner {
+public class Prisoner {	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
+    private int id;
+    @Basic
+    @Column(name = "PRISONER_NAME")
+    private String prisonerName;
+    @Basic
+    @Column(name = "INCIDENT")
+    private String incident;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private int id;
+    @Basic
+    @Column(name = "RELEASE_DATE")
+    private Timestamp releaseDate;
 
-	@Basic
-	@Column(name = "PRISONER_NAME")
-	private String prisonerName;
+    @Basic
+    @Column(name = "PLACE_DATE")
+    private Timestamp placeDate;
+    
+	  @Basic
+	  @Column(name = "SECURITY_LEVEL")
+	  private String prisonerSecurity;
 
-	@Basic
-	@Column(name = "INCIDENT")
-	private String incident;
+    @Column(name = "CELL_ID", insertable = false, updatable = false)
+    private int cellId;
 
-	@Basic
-	@Column(name = "RELEASE_DATE")
-	private Timestamp releaseDate;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="CELL_ID",nullable = false)
+    @JsonIgnore
+    private Prisoncell cell;
 
-	@Basic
-	@Column(name = "PLACE_DATE")
-	private Timestamp placeDate;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	@Basic
-	@Column(name = "SECURITY_LEVEL")
-	private String prisonerSecurity;
+    public String getPrisonerName() {
+        return prisonerName;
+    }
+    public void setPrisonerName(String prisonerName) {
+        this.prisonerName = prisonerName;
+    }
 
-	@Column(name = "CELL_ID", insertable = false, updatable = false)
-	private int cellId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CELL_ID", nullable = false)
-	@JsonIgnore
-	private Prisoncell cell;
+    public String getIncident() {
+        return incident;
+    }
+    public void setIncident(String incident) {
+        this.incident = incident;
+    }
 
-	public int getId() {
-		return id;
-	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Timestamp getReleaseDate() {
+        return releaseDate;
+    }
+    public void setReleaseDate(Timestamp releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-	public String getPrisonerName() {
-		return prisonerName;
-	}
 
-	public void setPrisonerName(String prisonerName) {
-		this.prisonerName = prisonerName;
-	}
+    public Timestamp getPlaceDate() {
+        return placeDate;
+    }
+    public void setPlaceDate(Timestamp placeDate) {
+        this.placeDate = placeDate;
+    }
 
-	public String getIncident() {
-		return incident;
-	}
+    public Prisoncell getCell() {
+        return cell;
+    }
 
-	public void setIncident(String incident) {
-		this.incident = incident;
-	}
+    public void setCell(Prisoncell cell) {
+        this.cell = cell;
+    }
 
-	public Timestamp getReleaseDate() {
-		return releaseDate;
-	}
+    public String getPrisonerSecurity() {
+        return prisonerSecurity;
+    }
 
-	public void setReleaseDate(Timestamp releaseDate) {
-		this.releaseDate = releaseDate;
-	}
+    public void setPrisonerSecurity(String prisonerSecurity) {
+        this.prisonerSecurity = prisonerSecurity;
+    }
 
-	public Timestamp getPlaceDate() {
-		return placeDate;
-	}
+    public int getCellId() {
+        return cellId;
+    }
 
-	public void setPlaceDate(Timestamp placeDate) {
-		this.placeDate = placeDate;
-	}
+    public void setCellId(int cellId) {
+        this.cellId = cellId;
+    }
 
-	public Prisoncell getCell() {
-		return cell;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Prisoner prisoner = (Prisoner) o;
+        return id == prisoner.id &&
+                Objects.equals(prisonerName, prisoner.prisonerName) &&
+                Objects.equals(incident, prisoner.incident) &&
+                Objects.equals(releaseDate, prisoner.releaseDate) &&
+                Objects.equals(placeDate, prisoner.placeDate);
+    }
 
-	public void setCell(Prisoncell cell) {
-		this.cell = cell;
-	}
+    @Override
+    public int hashCode() {
 
-	public int getCellId() {
-		return cellId;
-	}
-
-	public void setCellId(int cellId) {
-		this.cellId = cellId;
-	}
-
-	public String getPrisonerSecurity() {
-		return prisonerSecurity;
-	}
-
-	public void setPrisonerSecurity(String prisonerSecurity) {
-		this.prisonerSecurity = prisonerSecurity;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Prisoner prisoner = (Prisoner) o;
-		return id == prisoner.id && Objects.equals(prisonerName, prisoner.prisonerName) && Objects.equals(incident, prisoner.incident) && Objects.equals(releaseDate, prisoner.releaseDate) && Objects.equals(placeDate, prisoner.placeDate);
-	}
-
-	@Override
-	public int hashCode() {
-
-		return Objects.hash(id, prisonerName, incident, releaseDate, placeDate);
-	}
+        return Objects.hash(id, prisonerName, incident, releaseDate, placeDate);
+    }
+    
+    @Override
+    public String toString() {
+        return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
+                + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + "]";
+    }
 }

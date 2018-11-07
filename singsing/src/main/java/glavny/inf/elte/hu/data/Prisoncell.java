@@ -22,105 +22,109 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "prisoncell")
 public class Prisoncell implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
+    private int id;
+    @Basic
+    @Column(name = "SPACE")
+    private int space;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    @Basic
+    @Column(name = "CELL_DESC")
+    private String cellDesc;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private int id;
+    @Basic
+    @Column(name = "FLOOR")
+    private int floor;
 
-	@Basic
-	@Column(name = "SPACE")
-	private int space;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
+    private Set<Prisoner> prisoners = new HashSet<>(0);
 
-	@Basic
-	@Column(name = "CELL_DESC")
-	private String cellDesc;
+    @Column(name = "AREA_ID", insertable = false, updatable = false)
+    private int areaId;
 
-	@Basic
-	@Column(name = "FLOOR")
-	private int floor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "AREA_ID", nullable = false)
+    @JsonIgnore
+    private Area area;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
-	private Set<Prisoner> prisoners = new HashSet<>(0);
+    public Set<Prisoner> getPrisoners() {
+        return prisoners;
+    }
 
-	@Column(name = "AREA_ID", insertable = false, updatable = false)
-	private int areaId;
+    public int getId() {
+        return id;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "AREA_ID", nullable = false)
-	@JsonIgnore
-	private Area area;
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public Set<Prisoner> getPrisoners() {
-		return prisoners;
-	}
+    public int getSpace() {
+        return space;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setSpace(int space) {
+        this.space = space;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public String getCellDesc() {
+        return cellDesc;
+    }
 
-	public int getSpace() {
-		return space;
-	}
+    public void setCellDesc(String cellDesc) {
+        this.cellDesc = cellDesc;
+    }
 
-	public void setSpace(int space) {
-		this.space = space;
-	}
+    public int getFloor() {
+        return floor;
+    }
 
-	public String getCellDesc() {
-		return cellDesc;
-	}
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
 
-	public void setCellDesc(String cellDesc) {
-		this.cellDesc = cellDesc;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Prisoncell that = (Prisoncell) o;
+        return id == that.id && space == that.space && Objects.equals(cellDesc, that.cellDesc) && floor == that.floor;
+    }
 
-	public int getFloor() {
-		return floor;
-	}
+    @Override
+    public int hashCode() {
 
-	public void setFloor(int floor) {
-		this.floor = floor;
-	}
+        return Objects.hash(id, space, cellDesc, floor);
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
-		Prisoncell that = (Prisoncell) o;
-		return id == that.id && space == that.space && Objects.equals(cellDesc, that.cellDesc) && floor == that.floor;
-	}
+    public int getAreaId() {
+        return areaId;
+    }
 
-	@Override
-	public int hashCode() {
+    public void setAreaId(int areaId) {
+        this.areaId = areaId;
+    }
 
-		return Objects.hash(id, space, cellDesc, floor);
-	}
+    public Area getArea() {
+        return area;
+    }
 
-	public int getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(int areaId) {
-		this.areaId = areaId;
-	}
-
-	public Area getArea() {
-		return area;
-	}
-
-	public void setArea(Area area) {
-		this.area = area;
-	}
+    public void setArea(Area area) {
+        this.area = area;
+    }
+    
+    @Override
+    public String toString() {
+        String prisoners = "[";
+        for (Prisoner prisoner: this.prisoners) {
+            prisoners += "id=" + prisoner.getId() + " ";
+        }
+        prisoners += "]";
+        return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
+                + "]";
+    }
 }

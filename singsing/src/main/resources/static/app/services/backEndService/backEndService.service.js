@@ -150,7 +150,6 @@ angular.
             };
 
             this.getGuards = function (successCallback, errorCallback) {
-
                 $http.get("/prisonguard/").then(function (result) {
 
                     successCallback(result);
@@ -159,7 +158,28 @@ angular.
                     errorCallback(error);
                 });
             };
+            
+            this.getLogs = function (successCallback, errorCallback) {
 
+                $http.get("/auditlog/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.searchLogs = function (searchStr, successCallback, errorCallback) {
+                $http.get("/auditlog/find/" + searchStr).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+      
             this.createGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/new", guard).then(
@@ -176,6 +196,16 @@ angular.
             this.deleteGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/delete", guard).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.getSchedule = function (successCallback, errorCallback) {
+                $http.get("/schedule/").then(function (result) {
 
                     successCallback(result);
                 }, function (error) {

@@ -2,3 +2,5 @@
 .externalToolBuilders
 singsing/src/main/resources/static/node
 singsing/src/main/resources/static/node_modules
+singsing/src/main/resources/static/package-lock.json
+singsing/src/main/resources/static/package.json

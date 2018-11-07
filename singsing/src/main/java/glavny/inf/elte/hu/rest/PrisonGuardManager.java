@@ -1,5 +1,7 @@
 package glavny.inf.elte.hu.rest;
 
+import java.security.Principal;
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import glavny.inf.elte.hu.data.AuditLog;
+import glavny.inf.elte.hu.data.AuditLogRepository;
+import glavny.inf.elte.hu.data.ChangeType;
 import glavny.inf.elte.hu.data.PrisonGuard;
 import glavny.inf.elte.hu.data.PrisonGuardRepository;
 
@@ -27,6 +32,8 @@ public class PrisonGuardManager {
 
     @Autowired
     private PrisonGuardRepository prisonGuardRepository;
+    @Autowired
+    private AuditLogRepository auditLogRepository;
 
     @GetMapping("/")
     public ResponseEntity<List<PrisonGuard>> getPrisoners(Authentication auth) {
@@ -35,7 +42,10 @@ public class PrisonGuardManager {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard) {
+    public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE",
+                guard.toString()));
+
         prisonGuardRepository.save(guard);
 
         HttpHeaders headers = new HttpHeaders();
@@ -43,7 +53,10 @@ public class PrisonGuardManager {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Void> deletePrisonGuard(@RequestBody PrisonGuard guard) {
+    public ResponseEntity<Void> deletePrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE",
+                guard.toString()));
+
         prisonGuardRepository.delete(guard);
 
         HttpHeaders headers = new HttpHeaders();
