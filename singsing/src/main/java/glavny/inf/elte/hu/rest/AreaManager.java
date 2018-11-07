@@ -41,7 +41,6 @@ public class AreaManager {
     @Autowired
     private AuditLogRepository auditLogRepository;
 
-
     @GetMapping("/")
     public ResponseEntity<List<Area>> getPrisonCells(Authentication auth) {
         return new ResponseEntity<List<Area>>(areaRepository.findAll(), HttpStatus.OK);
@@ -55,10 +54,10 @@ public class AreaManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonCell(@RequestBody Area c, UriComponentsBuilder builder) {
-    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
-        
         areaRepository.save(c);
+
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user, new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
 
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -66,9 +65,9 @@ public class AreaManager {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updatePrisonCell(@RequestBody Area c, UriComponentsBuilder builder) {
-    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "MODIFY", c.toString()));
-        
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user, new Timestamp(System.currentTimeMillis()), "MODIFY", c.toString()));
+
         areaRepository.save(c);
 
         HttpHeaders headers = new HttpHeaders();
@@ -77,15 +76,15 @@ public class AreaManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonCell(@RequestBody Area c, UriComponentsBuilder builder) {
-    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
-    	
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+
         HttpHeaders headers = new HttpHeaders();
         int cells = prisoncellRepository.countCellByAreaId(c.getId());
         if (cells > 0) {
             return new ResponseEntity<Void>(headers, HttpStatus.CONFLICT);
-        }
-        else {
+        } else {
+            auditLogRepository
+                    .save(new AuditLog(user, new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
             areaRepository.delete(c);
             return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
         }

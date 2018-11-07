@@ -43,7 +43,8 @@ public class PrisonGuardManager {
 
     @PostMapping("/new")
     public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE", guard.toString()));
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE",
+                guard.toString()));
 
         prisonGuardRepository.save(guard);
 
@@ -53,8 +54,9 @@ public class PrisonGuardManager {
 
     @PostMapping("/delete")
     public ResponseEntity<Void> deletePrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE", guard.toString()));
-        
+        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE",
+                guard.toString()));
+
         prisonGuardRepository.delete(guard);
 
         HttpHeaders headers = new HttpHeaders();

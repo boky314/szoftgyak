@@ -38,7 +38,7 @@ public class PrisonCellManager {
 
     @Autowired
     private PrisoncellRepository prisoncellRepository;
-    
+
     @Autowired
     private AuditLogRepository auditLogRepository;
 
@@ -54,12 +54,12 @@ public class PrisonCellManager {
     public ResponseEntity<List<Prisoncell>> getPrisonCellsWithFreeSpace(Authentication auth) {
         return new ResponseEntity<List<Prisoncell>>(prisoncellRepository.findCellWithFreeSpace(), HttpStatus.OK);
     }
-    
+
     @PostMapping("/auditlog")
-    public ResponseEntity<Void> createLogCSVFile(@RequestParam(value = "fileName",defaultValue = "D:/log.cs") String fileName,Authentication auth)
-    {
-    	HttpHeaders headers = new HttpHeaders();
-    	return new ResponseEntity<Void>(headers,HttpStatus.CREATED);
+    public ResponseEntity<Void> createLogCSVFile(
+            @RequestParam(value = "fileName", defaultValue = "D:/log.cs") String fileName, Authentication auth) {
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -70,9 +70,8 @@ public class PrisonCellManager {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
-        
+    public ResponseEntity<Void> createPrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder,
+            Principal principal) {
         boolean flag = true;
 
         Area area = areaRepository.getOne(c.getAreaId());
@@ -82,6 +81,9 @@ public class PrisonCellManager {
         if (flag == false) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
+
+        auditLogRepository.save(
+                new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE", c.toString()));
         HttpHeaders headers = new HttpHeaders();
         // headers.setLocation(builder.path("/{id}").buildAndExpand(c.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -89,8 +91,8 @@ public class PrisonCellManager {
 
     @PutMapping("/update")
     public ResponseEntity<Void> updatePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder) {
-    	String user  = SecurityContextHolder.getContext().getAuthentication().getName();
-        auditLogRepository.save(new AuditLog(user,new Timestamp(System.currentTimeMillis()), "MODIFY", c.toString()));
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        auditLogRepository.save(new AuditLog(user, new Timestamp(System.currentTimeMillis()), "MODIFY", c.toString()));
         Area area = areaRepository.getOne(c.getAreaId());
         c.setArea(area);
 
@@ -101,13 +103,15 @@ public class PrisonCellManager {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Void> deletePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(),new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
-        
+    public ResponseEntity<Void> deletePrisonCell(@RequestBody Prisoncell c, UriComponentsBuilder builder,
+            Principal principal) {
         boolean flag = true;
         if (c.getPrisoners().size() > 0) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
+
+        auditLogRepository.save(
+                new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE", c.toString()));
         prisoncellRepository.delete(c);
 
         if (flag == false) {
