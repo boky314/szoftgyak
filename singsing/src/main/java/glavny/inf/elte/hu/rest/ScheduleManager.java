@@ -54,7 +54,7 @@ public class ScheduleManager {
         }
 
         //calculate all shift
-        LocalDate ld =  LocalDate.now().with(DayOfWeek.MONDAY);
+        LocalDate ld =  LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1);
         for(int i = 0; i < 4; ++i)
         {
             for(int j = 0; j < 7; ++j)
@@ -112,12 +112,23 @@ public class ScheduleManager {
             return true;
         }).collect(Collectors.toList());
 
-        //Add the extra work to gourds
+        //Add the extra work with zero overlaps
+        allShift =  allShift.stream().filter(e->{
+            for(int i = 0;  i < rotatingTimeTables.size(); ++i) {
+                GuardTimeTable t = rotatingTimeTables.remove();
+                rotatingTimeTables.add(t);
+                if (t.addExtraWorkSafe(e)) return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
+
+        //Add the extra work with force
         allShift =  allShift.stream().filter(e->{
             GuardTimeTable t = rotatingTimeTables.remove();
             rotatingTimeTables.add(t);
-            return !t.addExtraWork(e);
+            return !t.addExtraWorkHard(e);
         }).collect(Collectors.toList());
+
 
         return new ResponseEntity<List<GuardTimeTable>>(result,HttpStatus.OK);
     }

@@ -1,6 +1,7 @@
 package glavny.inf.elte.hu.data;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,12 +48,26 @@ public class GuardTimeTable implements Serializable {
         int time = entry.getEnd() - entry.getStart();
         if( getTotalWorkOnDayOfWeek(week, day) + time > 12 ) return false;
         if( getTotalWorkOnWeek(week) + time > 40 ) return false;
-        return workTime.get(week).get(day).add(entry);
+        return addSafe(entry);
     }
 
-    public boolean addExtraWork(TimetableEntry entry)
+    public boolean addExtraWorkSafe(TimetableEntry entry)
     {
-        boolean l = workTime.get(entry.getWeek()).get(entry.getDay()).add(entry);
+        return addExtraWork(entry, true);
+    }
+
+    public boolean addExtraWorkHard(TimetableEntry entry)
+    {
+        return addExtraWork(entry, false);
+    }
+
+    private boolean addExtraWork(TimetableEntry entry, boolean safe)
+    {
+        boolean l = false;
+        if(safe)
+            l = addSafe(entry);
+        else
+            l = workTime.get(entry.getWeek()).get(entry.getDay()).add(entry);
         if(l)
         {
              extraWorkPerWeek[entry.getWeek()] += (entry.getEnd() - entry.getStart());
@@ -60,7 +75,6 @@ public class GuardTimeTable implements Serializable {
         }
         return l;
     }
-
 
     private int getTotalWorkOnDayOfWeek(int week, int day)
     {
@@ -79,4 +93,14 @@ public class GuardTimeTable implements Serializable {
             result += getTotalWorkOnDayOfWeek(week,day);
         return result;
     }
+
+
+    private boolean addSafe(TimetableEntry entry){
+        List<TimetableEntry> shifts = workTime.get(entry.getWeek()).get(entry.getDay());
+        for( TimetableEntry  e :  shifts) {
+            if (e.getStart() == entry.getStart() || e.getEnd() == entry.getEnd()) return false;
+        }
+        return shifts.add(entry);
+    }
+
 }

@@ -24,6 +24,9 @@
                             <p>Shift: {{ shift.start}}h - {{ shift.end}}h </p>
                             <p ng-show="shift.extraWork">Extra work</p>
                         </div>
+                        <div ng-show="dayOfWeek.length === 0" style=" border: 1px solid black;">
+                            <p> Free day </p>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -40,7 +43,7 @@
                 <th>Week 1</th>
                 <th>Week 2</th>
                 <th>Week 3</th>
-                <th>Week 1</th>
+                <th>Week 4</th>
             </tr>
             <tr ng-repeat=" guardTimeTable in schedule">
                 <td>{{ guardTimeTable.guard.prisonGuardName}}</td>
