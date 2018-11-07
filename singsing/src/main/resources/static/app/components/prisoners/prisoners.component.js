@@ -159,8 +159,12 @@ angular.
               }
             );
           }
-         }
-        };
+        }
+        else {
+          loadPrisoners();
+        }
+      }
+
 
         $scope.editPrisoner = function (id) {
 
