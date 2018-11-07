@@ -21,6 +21,12 @@ angular.
         when('/guards', {
           template: '<guards></guards>'
         }).
+        when('/logout', {
+          controller: function(){
+            window.location.replace('/logout');
+          },
+          template: '<div></div>'
+        }).
         otherwise('/home');
 
       $locationProvider.html5Mode(true);
