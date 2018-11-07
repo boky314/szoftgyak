@@ -12,9 +12,12 @@ angular.
         $scope.newCell = {};
         $scope.cells = [];
         $scope.areas = [];
+        $scope.availableSecurity=[];
+        $scope.security ={};
         $scope.prisonersForSelectedCell = [];
         $scope.areaModel = BackEndModel.area;
         $scope.cellModel = BackEndModel.prisoncell;
+        $scope.newCell.prisonCellSecurity='Medium';
 
         var loadCells = function () {
           BackEndService.getCells(function (result) {
@@ -28,7 +31,7 @@ angular.
             console.log(error);
           });
         };
-
+        
         var loadAreas = function () {
           BackEndService.getAreas(function (result) {
 
@@ -40,6 +43,24 @@ angular.
             console.log(error);
           });
         };
+        
+        $scope.security = {
+        		availableSecurity: [
+        	      {name: 'Medium'},
+        	      {name: 'High'},
+        	      {name: 'Priority'}
+        	    ],
+        	    selectedSecurity: {name: 'Medium'},
+       };
+        
+        $scope.addSecurityLevel = function (name) {
+        	console.log(name);
+
+        	$scope.newCell.prisonCellSecurity = name;
+        	
+          }.bind($scope);
+
+                  
 
         var assigAreasToCells = function () {
 
@@ -73,8 +94,10 @@ angular.
 
           $scope.isEditing = false;
           $scope.newCell = {};
+          $scope.newCell.prisonCellSecurity='Medium';
         };
-
+        
+        
         $scope.submitNewCell = function () {
 
           if ($scope.cells.findIndex(a => a.id === $scope.newCell.id) > -1) {
@@ -113,6 +136,7 @@ angular.
 
             $scope.isEditing = true;
             $scope.newCell = $scope.cells[index];
+            $scope.security.selectedSecurity.name = $scope.newCell.prisonCellSecurity;
           }
         };
 

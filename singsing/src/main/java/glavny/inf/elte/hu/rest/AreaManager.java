@@ -27,7 +27,7 @@ import glavny.inf.elte.hu.data.PrisoncellRepository;
 @RequestMapping("area")
 @Transactional
 public class AreaManager {
-    private static Logger log = LoggerFactory.getLogger(UserManager.class);
+    private static Logger log = LoggerFactory.getLogger(AreaManager.class);
 
     @Autowired
     private AreaRepository areaRepository;

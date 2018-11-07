@@ -23,98 +23,116 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "prisoncell")
 public class Prisoncell implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
-    @Basic
-    @Column(name = "SPACE")
-    private int space;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    @Basic
-    @Column(name = "CELL_DESC")
-    private String cellDesc;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
+	private int id;
 
-    @Basic
-    @Column(name = "FLOOR")
-    private int floor;
+	@Basic
+	@Column(name = "SPACE")
+	private int space;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
-    private Set<Prisoner> prisoners = new HashSet<>(0);
+	@Basic
+	@Column(name = "CELL_DESC")
+	private String cellDesc;
 
-    @Column(name = "AREA_ID", insertable = false, updatable = false)
-    private int areaId;
+	@Basic
+	@Column(name = "FLOOR")
+	private int floor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AREA_ID", nullable = false)
-    @JsonIgnore
-    private Area area;
+	@Basic
+	@Column(name = "SECURITY_LEVEL")
+	private String prisonCellSecurity;
 
-    public Set<Prisoner> getPrisoners() {
-        return prisoners;
-    }
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cell")
+	private Set<Prisoner> prisoners = new HashSet<>(0);
 
-    public int getId() {
-        return id;
-    }
+	@Column(name = "AREA_ID", insertable = false, updatable = false)
+	private int areaId;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "AREA_ID", nullable = false)
+	@JsonIgnore
+	private Area area;
 
-    public int getSpace() {
-        return space;
-    }
+	public Set<Prisoner> getPrisoners() {
+		return prisoners;
+	}
 
-    public void setSpace(int space) {
-        this.space = space;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getCellDesc() {
-        return cellDesc;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setCellDesc(String cellDesc) {
-        this.cellDesc = cellDesc;
-    }
+	public int getSpace() {
+		return space;
+	}
 
-    public int getFloor() {
-        return floor;
-    }
+	public void setSpace(int space) {
+		this.space = space;
+	}
 
-    public void setFloor(int floor) {
-        this.floor = floor;
-    }
+	public String getCellDesc() {
+		return cellDesc;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        Prisoncell that = (Prisoncell) o;
-        return id == that.id && space == that.space && Objects.equals(cellDesc, that.cellDesc) && floor == that.floor;
-    }
+	public void setCellDesc(String cellDesc) {
+		this.cellDesc = cellDesc;
+	}
 
-    @Override
-    public int hashCode() {
+	public int getFloor() {
+		return floor;
+	}
 
-        return Objects.hash(id, space, cellDesc, floor);
-    }
+	public void setFloor(int floor) {
+		this.floor = floor;
+	}
 
-    public int getAreaId() {
-        return areaId;
-    }
+	public String getPrisonCellSecurity() {
+		return prisonCellSecurity;
+	}
 
-    public void setAreaId(int areaId) {
-        this.areaId = areaId;
-    }
+	public void setPrisonCellSecurity(String prisonCellSecurity) {
+		this.prisonCellSecurity = prisonCellSecurity;
+	}
 
-    public Area getArea() {
-        return area;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Prisoncell that = (Prisoncell) o;
+		return id == that.id && space == that.space && Objects.equals(cellDesc, that.cellDesc) && floor == that.floor;
+	}
 
-    public void setArea(Area area) {
-        this.area = area;
-    }
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id, space, cellDesc, floor);
+	}
+
+	public int getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(int areaId) {
+		this.areaId = areaId;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
 }

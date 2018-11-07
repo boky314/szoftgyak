@@ -1,6 +1,7 @@
 'use strict';
 
-// Register `prisoners` component, along with its associated controller and template
+// Register `prisoners` component, along with its associated controller and
+// template
 angular.
   module('prisoners', ['backEndService']).
   component('prisoners', {
@@ -12,9 +13,11 @@ angular.
         $scope.newPrisoner = {};
         $scope.prisoners = [];
         $scope.cells = [];
+        $scope.cellSecurityModel = {};
         $scope.prisonerModel = BackEndModel.prisoner;
         $scope.cellModel = BackEndModel.prisoncell;
-
+        $scope.newPrisoner.prisonerSecurity = 'Regular';
+        
         var loadCells = function () {
           BackEndService.getCells(function (result) {
 
@@ -55,10 +58,61 @@ angular.
 
           $scope.isEditing = false;
           $scope.newPrisoner = {};
+          $scope.newPrisoner.prisonerSecurity = 'Regular';
         };
 
+        $scope.security = {
+        		availableSecurity: [
+        	      {name: 'Regular'},
+        	      {name: 'Dangerous'},
+        	      {name: 'Violent'}
+        	    ],
+        	    selectedSecurity: {name: 'Regular'}
+       };
+        
+        $scope.addSecurityLevel = function (name) {
+          	$scope.newPrisoner.prisonerSecurity = name;
+        	
+          }.bind($scope);
+          
+        var validatePrisoner =  function (){
+          	var prisonerLevelValue = $scope.newPrisoner.prisonerSecurity;
+          	          	            
+          	$scope.cellSecurityModel = $scope.cells[$scope.newPrisoner.cellId - 1];
+          	var cellModelSecurityLevel = $scope.cellSecurityModel.prisonCellSecurity;          	         	
+          	
+          	var messageText = $('#requiredSecurity');
+          	var cellErrorBody = $('#cellError');
+          	
+     	    
+          	
+          	 if(prisonerLevelValue == 'Regular'){
+          		 console.log('It ok, regular');
+          		 cellErrorBody.hide();
+                 return true;
+             }else if(prisonerLevelValue == 'Dangerous' && cellModelSecurityLevel == 'Medium'){
+            	 console.log('Its not ok');
+            	 $scope.requiredSecurity = 'Required Cell security level is= High or Priority';
+           	  	 cellErrorBody.show();
+                 return false;
+             }
+             else if(prisonerLevelValue == 'Violent' && cellModelSecurityLevel != 'Priority'){
+            	 console.log('Its not ok, Violent!!');
+            	 $scope.requiredSecurity = 'Required Cell security level is = Priority';
+           	     cellErrorBody.show();
+                 return false;
+             }
+             else{
+           	  cellErrorBody.hide();
+                 return true;
+             }
+           }
+        
         $scope.submitNewPrisoner = function () {
+        	
+         var result = validatePrisoner();
 
+         if(result){
           if ($scope.prisoners.findIndex(a => a[$scope.prisonerModel.id] === $scope.newPrisoner[$scope.prisonerModel.id]) > -1) {
 
             BackEndService.updatePrisoner($scope.newPrisoner,
@@ -85,6 +139,7 @@ angular.
               }
             );
           }
+         }
         };
 
         $scope.editPrisoner = function (id) {
@@ -95,6 +150,8 @@ angular.
 
             $scope.isEditing = true;
             $scope.newPrisoner = $scope.prisoners[index];
+            $scope.security.selectedSecurity.name = $scope.newPrisoner.prisonerSecurity;
+            
           }
         };
 

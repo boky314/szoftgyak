@@ -18,7 +18,8 @@ angular.
                     cellDescription: "cellDesc",
                     floor: "floor",
                     prisoners: "prisoners",
-                    areaId: "areaId"
+                    areaId: "areaId",
+                    prisonCellSecurity: "prisonCellSecurity"
                 },
 
                 prisoner: {
@@ -27,7 +28,8 @@ angular.
                     incident: "incident",
                     releaseDate: "releaseDate",
                     placeDate: "placeDate",
-                    cellId: "cellId"
+                    cellId: "cellId",
+                    prisonerSecurity: "prisonerSecurity"	
                 },
 
                 prisonGuard: {

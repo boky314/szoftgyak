@@ -23,7 +23,7 @@ import glavny.inf.elte.hu.data.PrisonGuardRepository;
 @RequestMapping("prisonguard")
 @Transactional
 public class PrisonGuardManager {
-    private static Logger log = LoggerFactory.getLogger(UserManager.class);
+    private static Logger log = LoggerFactory.getLogger(PrisonGuardManager.class);
 
     @Autowired
     private PrisonGuardRepository prisonGuardRepository;

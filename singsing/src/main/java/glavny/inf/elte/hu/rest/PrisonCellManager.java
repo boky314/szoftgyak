@@ -28,7 +28,7 @@ import glavny.inf.elte.hu.data.PrisoncellRepository;
 @RequestMapping("prisoncell")
 @Transactional
 public class PrisonCellManager {
-    private static Logger log = LoggerFactory.getLogger(UserManager.class);
+    private static Logger log = LoggerFactory.getLogger(PrisonCellManager.class);
 
     @Autowired
     private PrisoncellRepository prisoncellRepository;
