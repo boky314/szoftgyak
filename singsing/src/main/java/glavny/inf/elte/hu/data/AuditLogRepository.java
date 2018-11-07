@@ -10,4 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLog,Integer> {
     public List<AuditLog> findAll();
+
+    public List<AuditLog> searchByString(String str);
 }

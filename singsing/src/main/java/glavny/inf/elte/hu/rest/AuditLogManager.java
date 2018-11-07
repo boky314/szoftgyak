@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,13 @@ public class AuditLogManager {
     public  ResponseEntity<List<AuditLog>> getLogs(Authentication auth)
     {
         List<AuditLog> result = auditLogRepository.findAll();
+        return new ResponseEntity<List<AuditLog>>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/find/{str}")
+    public  ResponseEntity<List<AuditLog>> searchLogs(@PathVariable("str") String str, Authentication auth)
+    {
+        List<AuditLog> result = auditLogRepository.searchByString(str);
         return new ResponseEntity<List<AuditLog>>(result, HttpStatus.OK);
     }
 }
