@@ -1,3 +1,4 @@
 .project
 .externalToolBuilders
+singsing/src/main/resources/static/node
 singsing/src/main/resources/static/node_modules

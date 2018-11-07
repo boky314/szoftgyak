@@ -149,8 +149,8 @@ angular.
                 });
             };
 
-            this.getSchedule = function (successCallback, errorCallback) {
-                $http.get("/timetable/").then(function (result) {
+            this.getGuards = function (successCallback, errorCallback) {
+                $http.get("/prisonguard/").then(function (result) {
 
                     successCallback(result);
                 }, function (error) {
@@ -159,24 +159,38 @@ angular.
                 });
             };
 
-            this.get = function (path) {
+            this.createGuard = function (guard, successCallback, errorCallback) {
 
-                return $http.get(path);
+                $http.post("/prisonguard/new", guard).then(
+                    function (result) {
+
+                        successCallback(result);
+                    }, function (error) {
+
+                        errorCallback(error);
+                    }
+                );
             };
 
-            this.post = function (path, body) {
+            this.deleteGuard = function (guard, successCallback, errorCallback) {
 
-                return $http.post(path, body);
+                $http.post("/prisonguard/delete", guard).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
             };
 
-            this.put = function (path, body) {
+            this.getSchedule = function (successCallback, errorCallback) {
+                $http.get("/timetable/").then(function (result) {
 
-                return $http.put(path, body);
-            };
+                    successCallback(result);
+                }, function (error) {
 
-            this.delete = function (path, id, successCallback, errorCallback) {
-
-                return $http.delete(path + "/" + id);
+                    errorCallback(error);
+                });
             };
         }
     ]);
