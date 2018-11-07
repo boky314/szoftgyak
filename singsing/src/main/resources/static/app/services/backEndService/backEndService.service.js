@@ -170,6 +170,16 @@ angular.
                     errorCallback(error);
                 });
             };
+
+            this.searchLogs = function (searchStr, successCallback, errorCallback) {
+                $http.get("/auditlog/find/" + searchStr).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
       
             this.createGuard = function (guard, successCallback, errorCallback) {
 
