@@ -1,14 +1,24 @@
 package glavny.inf.elte.hu.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "prisoner")
-public class Prisoner {
+public class Prisoner {	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -27,7 +37,10 @@ public class Prisoner {
     @Basic
     @Column(name = "PLACE_DATE")
     private Timestamp placeDate;
-
+    
+	  @Basic
+	  @Column(name = "SECURITY_LEVEL")
+	  private String prisonerSecurity;
 
     @Column(name = "CELL_ID", insertable = false, updatable = false)
     private int cellId;
@@ -81,6 +94,14 @@ public class Prisoner {
 
     public void setCell(Prisoncell cell) {
         this.cell = cell;
+    }
+
+    public String getPrisonerSecurity() {
+        return prisonerSecurity;
+    }
+
+    public void setPrisonerSecurity(String prisonerSecurity) {
+        this.prisonerSecurity = prisonerSecurity;
     }
 
     public int getCellId() {

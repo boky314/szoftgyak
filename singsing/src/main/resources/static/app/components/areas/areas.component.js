@@ -12,6 +12,9 @@ angular.
         $scope.areas = [];
         $scope.isEditing = false;
         $scope.areaModel = BackEndModel.area;
+        $scope.availableSecurity=[];
+        $scope.security ={};
+        $scope.newArea.areaSecurity='Medium';
 
         var loadAreas = function () {
           BackEndService.getAreas(function (result) {
@@ -79,6 +82,7 @@ angular.
 
             $scope.isEditing = true;
             $scope.newArea = $scope.areas[index];
+            $scope.security.selectedSecurity.name = $scope.newArea.areaSecurity;
           }
         };
 
@@ -106,6 +110,23 @@ angular.
 
           resetNewArea();
         };
+        
+        
+        $scope.security = {
+        		availableSecurity: [
+        	      {name: 'Medium'},
+        	      {name: 'High'},
+        	      {name: 'Priority'}
+        	    ],
+        	    selectedSecurity: {name: 'Medium'},
+       };
+        
+        $scope.addSecurityLevel = function (name) {
+        	$scope.newArea.areaSecurity = name;
+        	
+          }.bind($scope);
+
+        
       }
     ]
   });
