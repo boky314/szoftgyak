@@ -38,4 +38,9 @@ public class Area {
     public Set<Prisoncell> getPrisonCells() {
         return prisonCells;
     }
+
+	  @Override
+    public String toString() {
+        return "Area [id=" + id + ", name=" + name + "]";
+    }
 }

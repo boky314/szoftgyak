@@ -117,4 +117,15 @@ public class Prisoncell implements Serializable {
     public void setArea(Area area) {
         this.area = area;
     }
+    
+    @Override
+    public String toString() {
+        String prisoners = "[";
+        for (Prisoner prisoner: this.prisoners) {
+            prisoners += "id=" + prisoner.getId() + " ";
+        }
+        prisoners += "]";
+        return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
+                + "]";
+    }
 }

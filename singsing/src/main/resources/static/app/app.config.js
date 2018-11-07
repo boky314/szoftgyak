@@ -24,6 +24,15 @@ angular.
         when('/schedules', {
           template: '<schedules></schedules>'
         }).
+        when('/logs', {
+          template: '<logs></logs>'
+        }).
+        when('/logout', {
+          controller: function(){
+            window.location.replace('/logout');
+          },
+          template: '<div></div>'
+        }).
         otherwise('/home');
 
       $locationProvider.html5Mode(true);
