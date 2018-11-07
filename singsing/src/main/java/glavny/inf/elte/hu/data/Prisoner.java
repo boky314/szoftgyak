@@ -40,7 +40,7 @@ public class Prisoner {
     
 	  @Basic
 	  @Column(name = "SECURITY_LEVEL")
-	  private String prisonerSecurity;
+    private String prisonerSecurity;
 
     @Column(name = "CELL_ID", insertable = false, updatable = false)
     private int cellId;
@@ -133,6 +133,6 @@ public class Prisoner {
     @Override
     public String toString() {
         return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
-                + releaseDate + ", placeDate=" + placeDate + ", cellId=" + cellId + "]";
+                + releaseDate + ", prisonerSecurity=" + prisonerSecurity + ", placeDate=" + placeDate + ", cellId=" + cellId + "]";
     }
 }
