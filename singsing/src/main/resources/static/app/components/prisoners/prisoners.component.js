@@ -93,7 +93,21 @@ angular.
           
         var validatePrisoner =  function (){
         	var areaSecurityLevel;
+        	var areaId;
         	
+            var indexCell = $scope.cells.findIndex(a => a[$scope.cellModel.cellId] === $scope.newPrisoner.cellId);
+
+            if (indexCell > -1) {
+              areaId = $scope.cells[indexCell].areaId;
+            }
+            
+            
+            var indexArea = $scope.areas.findIndex(a => a[$scope.areaModel.areaId] === areaId);
+            if (indexArea > -1) {
+              areaSecurityLevel = $scope.cells[indexArea].areaSecurity;
+            }
+
+            
         	$scope.cellSecurityModel = $scope.cells[$scope.newPrisoner.cellId - 1];
         	$scope.areaModel = $scope.areas[$scope.cellSecurityModel.areaId - 1];
           	var areaSecurityLevel = $scope.areaModel.areaSecurity;        
@@ -175,6 +189,7 @@ angular.
             $scope.isEditing = true;
             $scope.newPrisoner = $scope.prisoners[index];
             $scope.security.selectedSecurity.name = $scope.newPrisoner.prisonerSecurity;
+            $scope.newPrisoner.releaseDate = new Date($scope.prisoners[index].releaseDate);
             
           }
         };
