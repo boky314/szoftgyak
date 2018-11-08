@@ -125,6 +125,6 @@ public class Prisoncell implements Serializable {
         }
         prisoners += "]";
         return "Prisoncell [id=" + id + ", space=" + space + ", cellDesc=" + cellDesc + ", prisoners=" + prisoners
-                + "]";
+                + ", areaId=" + areaId + "]";
     }
 }
