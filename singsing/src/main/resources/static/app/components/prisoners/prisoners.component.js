@@ -171,6 +171,7 @@ angular.
             $scope.isEditing = true;
             $scope.newPrisoner = $scope.prisoners[index];
             $scope.security.selectedSecurity.name = $scope.newPrisoner.prisonerSecurity;
+            $scope.newPrisoner.releaseDate = new Date($scope.prisoners[index].releaseDate);
             
           }
         };

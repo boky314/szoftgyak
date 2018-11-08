@@ -13,7 +13,7 @@
         Incident:<br>
         <input type="text" ng-model="newPrisoner[prisonerModel.incident]"><br>
         ReleaseDate:<br>
-        <input type="date" ng-model="newPrisoner[prisonerModel.releaseDate]"><br>
+        <input type="date" ng-model="newPrisoner[prisonerModel.releaseDate]" placeholder="yyyy-MM-dd"><br>
         Cell:<br>
         <select id="cell" ng-model="newPrisoner[prisonerModel.cellId]" ng-options="x[cellModel.id] as x[cellModel.id] for x in cells"></select>
         <br>
