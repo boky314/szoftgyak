@@ -27,6 +27,9 @@ angular.
         when('/logs', {
           template: '<logs></logs>'
         }).
+        when('/map', {
+          template: '<map></map>'
+        }).
         when('/logout', {
           controller: function(){
             window.location.replace('/logout');
