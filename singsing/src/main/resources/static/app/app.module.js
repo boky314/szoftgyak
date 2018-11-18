@@ -11,6 +11,6 @@ var app = angular.module('SingSingApp', [
   'guards',
   'schedules',
   'logs',
-  'map',
+  'topology',
   'backEndModel'
 ]);
