@@ -10,9 +10,9 @@ angular.
         $scope.network = null;
 
         const singsingColor = '#777';
-        const mediumsecColor = '#0075C4';
-        const highsecColor = '#47578C';
-        const prioritysecColor = '#483560';
+        const mediumsecColor = '#80ccff';
+        const highsecColor = '#0091F2';
+        const prioritysecColor = '#302340';
 
         
         var createNetwork = function () {
@@ -22,7 +22,7 @@ angular.
               return;
             }
 
-            //console.log(result.data);
+            console.log(result.data);
 
             var nodesArray = [{id: 'SingSing', label: 'SingSing', group: 'singsing'}];
             var edgesArray = [];
@@ -43,7 +43,11 @@ angular.
                   break;
               }
 
-              nodesArray.push({id: 'A' + i, label: area.name, group: areaGroup});
+              nodesArray.push({
+                id: 'A' + i, label: area.name, 
+                title: '<b>Id:</b> ' + area.id + '<br /><b>Security level:</b> ' + area.areaSecurity, 
+                group: areaGroup
+              });
               edgesArray.push({from: 'SingSing', to: 'A' + i, color: {color: singsingColor, opacity:0.5}});
 
               if(area.prisonCells.length > 0){
@@ -63,7 +67,12 @@ angular.
                       break;
                   }
     
-                  nodesArray.push({id: 'C' + i + '-' + j, label: 'Cell: ' + prisonCell.prisoners.length +  '/' + prisonCell.space + '\nFloor: ' + prisonCell.floor, group: cellGroup});
+                  nodesArray.push({
+                    id: 'C' + i + '-' + j, 
+                    label: 'Cell: ' + prisonCell.prisoners.length +  '/' + prisonCell.space + '\nFloor: ' + prisonCell.floor, 
+                    title: '<b>Id:</b> ' + prisonCell.id + '<br /><b>Description:</b> ' + prisonCell.cellDesc, 
+                    group: cellGroup
+                  });
                   edgesArray.push({from: 'A' + i, to: 'C' + i + '-' + j, color: {color: singsingColor, opacity:0.5}});
                   
                   if(prisonCell.prisoners.length > 0){
@@ -84,7 +93,13 @@ angular.
                           break;
                       }
 
-                      nodesArray.push({id: 'P' + i + '-' + j + '-' + k, label: prisoner.prisonerName, group: prisonerGroup});
+                      var prisonerRelease = new Date(prisoner.releaseDate);
+                      nodesArray.push({
+                        id: 'P' + i + '-' + j + '-' + k, 
+                        label: prisoner.prisonerName,
+                        title: '<b>Id:</b> ' + prisoner.id + '<br /><b>Incident:</b> ' + prisoner.incident + '<br /><b>Security level:</b> ' + prisoner.prisonerSecurity + '<br /><b>Release date:</b> ' + prisonerRelease.toDateString(), 
+                        group: prisonerGroup
+                      });
                       edgesArray.push({from: 'C' + i + '-' + j, to: 'P' + i + '-' + j + '-' + k, color: {color: singsingColor, opacity:0.5}});    
                     }
                   }
@@ -99,6 +114,7 @@ angular.
               edges: new $window.vis.DataSet(edgesArray)
             };
             var options = {
+              interaction:{hover:true},
               groups: {
                 singsing: {
                   shape: 'icon',
