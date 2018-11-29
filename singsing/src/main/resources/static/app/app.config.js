@@ -28,7 +28,7 @@ angular.
           template: '<logs></logs>'
         }).
         when('/logout', {
-          controller: function(){
+          controller: function () {
             window.location.replace('/logout');
           },
           template: '<div></div>'
@@ -39,5 +39,5 @@ angular.
     }
   ]).
   constant('appSettings', {
-    versionNumber: "1.1.1.0"
+    versionNumber: "1.1.2.0"
   });
