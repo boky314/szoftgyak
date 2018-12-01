@@ -19,4 +19,6 @@ public interface PrisonerRepository extends JpaRepository<Prisoner,Integer> {
     @Query("select p from Prisoner p where p.releaseDate > :releaseDate")
     public List<Prisoner> findPrisonerByReleaseDateAfter(@Param("releaseDate") Timestamp releaseDate);
     public Optional<Prisoner> findById(Integer id);
+    @Query(value = "select count(*) from prisoner where release_date > current_timestamp()", nativeQuery = true)
+    public int countPrisoners();
 }

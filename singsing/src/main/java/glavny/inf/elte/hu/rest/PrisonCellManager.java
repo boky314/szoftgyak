@@ -29,6 +29,7 @@ import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
+import glavny.inf.elte.hu.data.PrisonerRepository;
 
 @RestController
 @RequestMapping("prisoncell")
@@ -38,6 +39,9 @@ public class PrisonCellManager {
 
     @Autowired
     private PrisoncellRepository prisoncellRepository;
+
+    @Autowired
+    private PrisonerRepository prisonerRepository;
 
     @Autowired
     private AuditLogRepository auditLogRepository;
@@ -120,5 +124,13 @@ public class PrisonCellManager {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/{id}").buildAndExpand(c.getId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/fullness")
+    public ResponseEntity<Float> cellFullness() {
+        int prisonerCount = prisonerRepository.countPrisoners();
+        int availableSpace = prisoncellRepository.availableSpace();
+        float fullness = (float) prisonerCount / (float) availableSpace;
+        return new ResponseEntity<Float>(fullness, HttpStatus.OK);
     }
 }

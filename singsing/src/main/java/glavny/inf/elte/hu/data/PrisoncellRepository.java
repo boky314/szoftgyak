@@ -18,4 +18,6 @@ public interface PrisoncellRepository extends JpaRepository<Prisoncell,Integer> 
     List<Prisoncell> findCellWithFreeSpace();
     @Query(value = "select count(*) from prisoncell where AREA_ID = :id", nativeQuery = true)
     int countCellByAreaId(@Param("id") int id);
+    @Query(value = "select sum(space) from prisoncell;", nativeQuery = true)
+    int availableSpace();
 }
