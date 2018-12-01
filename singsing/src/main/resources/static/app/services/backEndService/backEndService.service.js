@@ -158,7 +158,7 @@ angular.
                     errorCallback(error);
                 });
             };
-            
+
             this.getLogs = function (successCallback, errorCallback) {
 
                 $http.get("/auditlog/").then(function (result) {
@@ -179,7 +179,7 @@ angular.
                     errorCallback(error);
                 });
             };
-      
+
             this.createGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/new", guard).then(
@@ -206,6 +206,16 @@ angular.
 
             this.getSchedule = function (successCallback, errorCallback) {
                 $http.get("/schedule/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.getFullness = function (successCallback, errorCallback) {
+                $http.post("/prisoncell/fullness", null).then(function (result) {
 
                     successCallback(result);
                 }, function (error) {
