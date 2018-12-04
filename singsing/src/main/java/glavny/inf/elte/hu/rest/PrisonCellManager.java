@@ -142,7 +142,7 @@ public class PrisonCellManager {
     		summOfFullness += (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
     	}
     	
-    	float avarage = summOfFullness/(prisonCells.size());
+    	float avarage = summOfFullness/(float)(prisonCells.size());
     	float deviation = 0.0f;
     	
     	for(int i = 0; i < prisonCells.size() ;i++) {
