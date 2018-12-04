@@ -150,7 +150,7 @@ public class PrisonCellManager {
     		deviation +=  Math.pow(fullness-avarage,2);
     	}
     	
-    	float dispersion = ((float) Math.sqrt(deviation/(float)prisonCells.size()));
+    	float dispersion = (float) Math.sqrt(deviation/(float)prisonCells.size());
         return new ResponseEntity<Float>((100.0f*dispersion)/0.5f, HttpStatus.OK);
     }
 }
