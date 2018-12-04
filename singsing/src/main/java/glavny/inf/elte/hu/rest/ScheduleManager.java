@@ -1,7 +1,19 @@
 package glavny.inf.elte.hu.rest;
 
 
-import glavny.inf.elte.hu.data.*;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +25,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Guard;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import glavny.inf.elte.hu.data.Area;
+import glavny.inf.elte.hu.data.AreaRepository;
+import glavny.inf.elte.hu.data.GuardTimeTable;
+import glavny.inf.elte.hu.data.PrisonGuard;
+import glavny.inf.elte.hu.data.PrisonGuardRepository;
+import glavny.inf.elte.hu.data.Prisoncell;
+import glavny.inf.elte.hu.data.PrisoncellRepository;
+import glavny.inf.elte.hu.data.Prisoner;
+import glavny.inf.elte.hu.data.TimetableEntry;
 
 @RestController
 @RequestMapping("schedule")

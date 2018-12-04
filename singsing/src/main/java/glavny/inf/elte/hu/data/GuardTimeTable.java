@@ -1,7 +1,6 @@
 package glavny.inf.elte.hu.data;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

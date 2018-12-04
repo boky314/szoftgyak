@@ -213,6 +213,11 @@ angular.
                     errorCallback(error);
                 });
             };
+<<<<<<< HEAD
+
+            this.getFullness = function (successCallback, errorCallback) {
+                $http.post("/prisoncell/fullness", null).then(function (result) {
+=======
             
             this.getHolidays = function (successCallback, errorCallback){
             	  $http.get("/holiday/").then(function (result) {
@@ -237,12 +242,16 @@ angular.
             
             this.updateHoliday = function (holiday, successCallback, errorCallback){
           	  $http.post("/holiday/update", holiday).then(function (result) {
+>>>>>>> Rebase master
 
                     successCallback(result);
                 }, function (error) {
 
                     errorCallback(error);
                 });
+<<<<<<< HEAD
+            };
+=======
           };
           
           this.userIsGuard = function(successCallback, errorCallback){
@@ -256,15 +265,6 @@ angular.
           };
           
           
-
-            this.getFullness = function (successCallback, errorCallback) {
-                $http.post("/prisoncell/fullness", null).then(function (result) {
-
-                    successCallback(result);
-                }, function (error) {
-
-                    errorCallback(error);
-                });
-            };
+>>>>>>> Rebase master
         }
     ]);

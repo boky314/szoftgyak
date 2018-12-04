@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
-import glavny.inf.elte.hu.data.ChangeType;
 import glavny.inf.elte.hu.data.PrisonGuard;
 import glavny.inf.elte.hu.data.PrisonGuardRepository;
 
@@ -28,38 +28,52 @@ import glavny.inf.elte.hu.data.PrisonGuardRepository;
 @RequestMapping("prisonguard")
 @Transactional
 public class PrisonGuardManager {
-    private static Logger log = LoggerFactory.getLogger(PrisonGuardManager.class);
+	private static Logger log = LoggerFactory.getLogger(PrisonGuardManager.class);
 
-    @Autowired
-    private PrisonGuardRepository prisonGuardRepository;
-    @Autowired
-    private AuditLogRepository auditLogRepository;
+	@Autowired
+	private PrisonGuardRepository prisonGuardRepository;
+	@Autowired
+	private AuditLogRepository auditLogRepository;
 
-    @GetMapping("/")
-    public ResponseEntity<List<PrisonGuard>> getPrisoners(Authentication auth) {
-        List<PrisonGuard> result = prisonGuardRepository.findAll();
-        return new ResponseEntity<List<PrisonGuard>>(result, HttpStatus.OK);
-    }
+	@GetMapping("/")
+	public ResponseEntity<List<PrisonGuard>> getPrisoners(Authentication auth) {
+		List<PrisonGuard> result = prisonGuardRepository.findAll();
+		return new ResponseEntity<List<PrisonGuard>>(result, HttpStatus.OK);
+	}
 
-    @PostMapping("/new")
-    public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE",
-                guard.toString()));
+	@PostMapping("/new")
+	public ResponseEntity<Void> createPrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
+		auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "CREATE",
+				guard.toString()));
 
-        prisonGuardRepository.save(guard);
+		prisonGuardRepository.save(guard);
 
-        HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-    }
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
 
-    @PostMapping("/delete")
-    public ResponseEntity<Void> deletePrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
-        auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE",
-                guard.toString()));
+	@PostMapping("/delete")
+	public ResponseEntity<Void> deletePrisonGuard(@RequestBody PrisonGuard guard, Principal principal) {
+		auditLogRepository.save(new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "DELETE",
+				guard.toString()));
 
-        prisonGuardRepository.delete(guard);
+		prisonGuardRepository.delete(guard);
 
-        HttpHeaders headers = new HttpHeaders();
-        return new ResponseEntity<Void>(headers, HttpStatus.OK);
-    }
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.OK);
+	}
+
+	@GetMapping("/isguard")
+	public ResponseEntity<Boolean> userIsGuard() {
+		Boolean result = false;
+		String guardName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		List<PrisonGuard> findByName = prisonGuardRepository.findByName(guardName);
+
+		result = findByName != null && findByName.size() == 1;
+
+		log.info("User is guard: " + result);
+
+		return new ResponseEntity<Boolean>(result, HttpStatus.OK);
+	}
 }

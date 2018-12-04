@@ -1,0 +1,52 @@
+<div>
+    <h1>Holiday Maintain</h1>
+    <form name="holidayForm" ng-if="isGuard">
+        Holiday from date:<br>
+        <input type="date" ng-model="newHoliday[holidayModel.fromDate]" placeholder="yyyy-MM-dd"><br>
+        Holiday to date:<br>
+        <input type="date" ng-model="newHoliday[holidayModel.toDate]" placeholder="yyyy-MM-dd"><br>
+        <button ng-disabled="holidayForm.$invalid" ng-click="submitNewHoliday()">
+            Add
+        </button>
+        <button ng-click="cancelNewHoliday()">
+            Cancel
+        </button>
+    </form>
+</div>
+<hr />
+<div>
+    <table id="holidayList_table" class="table table-condensed table-bordered table-striped">
+        <thead>
+            <td>
+                From Date
+            </td>
+            <td>
+                To Date
+            </td>
+            <td>
+                Guard Name
+            </td>
+            <td>
+                Status
+            </td>
+            <td ng-if="!isGuard">
+                Operation
+            </td>
+        </thead>
+        <tbody>
+            <tr ng-repeat="i in holidays">
+                <td>{{i[holidayModel.fromDate] | date:'short'}}</td>
+                <td>{{i[holidayModel.toDate] | date:'short'}}</td>
+                <td>{{i[holidayModel.guardName]}}</td>
+                <td>{{i[holidayModel.status]}}</td>
+                <td>
+                <button ng-click="approveHoliday(i[holidayModel.id], 'APPROVED')" ng-if="!isGuard">
+                	Approve
+                </button>
+                <button ng-click="approveHoliday(i[holidayModel.id], 'DECLINED')" ng-if="!isGuard">
+                	Decline
+                </button>
+                </td>
+            </tr>
+    </table>
+</div>

@@ -9,6 +9,7 @@ var app = angular.module('SingSingApp', [
   'prisoners',
   'areas',
   'guards',
+  'holiday',
   'schedules',
   'logs',
   'topology',

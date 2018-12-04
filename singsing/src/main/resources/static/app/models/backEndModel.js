@@ -36,7 +36,13 @@ angular.
                 prisonGuard: {
                     name: "prisonGuardName"
                 },
-                
+                holiday: {
+                	id: "id",
+                    guardName: "guardName",
+                    fromDate: "fromDate",
+                    toDate: "toDate",
+                    status: "status"                    
+                },               
                 
             };
 

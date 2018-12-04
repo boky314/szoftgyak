@@ -4,15 +4,6 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 
-import java.sql.Timestamp;
-import java.util.List;
-import glavny.inf.elte.hu.data.Area;
-import glavny.inf.elte.hu.data.Prisoncell;
-import glavny.inf.elte.hu.data.PrisoncellRepository;
-import glavny.inf.elte.hu.data.Prisoner;
-import glavny.inf.elte.hu.data.PrisonerRepository;
-import glavny.inf.elte.hu.data.User;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
-import glavny.inf.elte.hu.data.ChangeType;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
 import glavny.inf.elte.hu.data.Prisoner;
