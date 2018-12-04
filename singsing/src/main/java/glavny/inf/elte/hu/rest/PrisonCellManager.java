@@ -143,14 +143,14 @@ public class PrisonCellManager {
     	}
     	
     	float avarage = summOfFullness/(prisonCells.size());
-    	float dispersion = 0.0f;
+    	float deviation = 0.0f;
     	
     	for(int i = 0; i < prisonCells.size() ;i++) {
     		float fullness = (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
-        	dispersion +=  Math.pow(fullness-avarage,2);
+    		deviation +=  Math.pow(fullness-avarage,2);
     	}
     	
-    	dispersion = ((float) Math.sqrt(dispersion/(float)prisonCells.size()));
+    	float dispersion = ((float) Math.sqrt(deviation/(float)prisonCells.size()));
         return new ResponseEntity<Float>((100.0f*dispersion)/0.5f, HttpStatus.OK);
     }
 }
