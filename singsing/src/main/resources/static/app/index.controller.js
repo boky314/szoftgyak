@@ -16,6 +16,19 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
                 setTimeout(function () { loadFullness(); }, 5000);
             });
         };
+        
+        var loadDispersion = function () {
+            BackEndService.getDispersion(function (result) {
+
+                setDispersion(result.data);
+                setTimeout(function () { loadDispersion(); }, 5000);
+            }, function (error) {
+
+                setDispersion(0);
+                console.log(error);
+                setTimeout(function () { loadDispersion(); }, 5000);
+            });
+        };
 
         var setFullness = function (fullness) {
             $scope.fullness = fullness;
@@ -24,7 +37,15 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
             };
         };
 
-        loadFullness();
+		var setDispersion = function(dispersion)  {
+			$scope.dispersion = dispersion;
+			$scope.dispersionStyle = {
+                "width": $scope.dispersion + "%"
+            };
+		};
 
+
+        loadFullness();
+		loadDispersion();
         $scope.versionNumber = appSettings.versionNumber;
     }]);

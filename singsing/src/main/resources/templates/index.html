@@ -55,11 +55,21 @@
       </div>
     </nav>
 
+	<h5>Average fullness of the cells.</h5>
     <div class="progress">
       <div class="progress-bar" role="progressbar" ng-style="fullnessStyle">
         {{fullness}}%
       </div>
     </div>
+	
+	<h5>Uniform distribution of the cells.</h5>
+	<div class="progress">
+      <div class="progress-bar" role="progressbar" ng-style="dispersionStyle">
+        {{dispersion}}%
+      </div>
+    </div>
+
+
 
     <div class="main-container">
       <div class="container">

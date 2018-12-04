@@ -21,4 +21,6 @@ public interface PrisonerRepository extends JpaRepository<Prisoner,Integer> {
     public Optional<Prisoner> findById(Integer id);
     @Query(value = "select count(*) from prisoner where release_date > current_timestamp()", nativeQuery = true)
     public int countPrisoners();
+    @Query(value = "select count(id) from prisoner where CELL_ID = :id and release_date > current_timestamp()", nativeQuery = true)
+    int dispersion(@Param("id") int id);
 }

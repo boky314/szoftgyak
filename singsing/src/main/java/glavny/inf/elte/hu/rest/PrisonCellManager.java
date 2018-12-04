@@ -133,4 +133,24 @@ public class PrisonCellManager {
         float fullness = (float) prisonerCount / (float) availableSpace;
         return new ResponseEntity<Float>(fullness, HttpStatus.OK);
     }
+    @PostMapping("/dispersion")
+    public ResponseEntity<Float> dispersion() {
+    	List<Prisoncell> prisonCells = prisoncellRepository.findAll();
+    	float summOfFullness = 0.0f;
+    	
+    	for(int i = 0; i < prisonCells.size() ;i++) { 		
+    		summOfFullness += (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
+    	}
+    	
+    	float avarage = summOfFullness/(float)(prisonCells.size());
+    	float deviation = 0.0f;
+    	
+    	for(int i = 0; i < prisonCells.size() ;i++) {
+    		float fullness = (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
+    		deviation +=  Math.pow(fullness-avarage,2);
+    	}
+    	
+    	float dispersion = (float) Math.sqrt(deviation/(float)prisonCells.size());
+        return new ResponseEntity<Float>((100.0f*dispersion)/0.5f, HttpStatus.OK);
+    }
 }
