@@ -136,29 +136,21 @@ public class PrisonCellManager {
     @PostMapping("/dispersion")
     public ResponseEntity<Float> dispersion() {
     	List<Prisoncell> prisonCells = prisoncellRepository.findAll();
-    	float avarage = 0.0f;
+    	float summOfFullness = 0.0f;
     	
     	for(int i = 0; i < prisonCells.size() ;i++) { 		
-    		if(prisonerRepository.dispersion(prisonCells.get(i).getId()) != null) {
-    			avarage += (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
-    		}else {
-    			avarage += 0.0f;
-    		}
+    		summOfFullness += (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
     	}
     	
-    	avarage = avarage/(prisonCells.size());
+    	float avarage = summOfFullness/(prisonCells.size());
     	float dispersion = 0.0f;
     	
     	for(int i = 0; i < prisonCells.size() ;i++) {
-    		if(prisonerRepository.dispersion(prisonCells.get(i).getId()) != null) {
-    			float fullness = (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
-        		dispersion +=  Math.pow(fullness-avarage,2);
-    		}else {
-    			dispersion +=  Math.pow(0.0f-avarage,2);
-    		}
-    		
+    		float fullness = (float)prisonerRepository.dispersion(prisonCells.get(i).getId())/(float)prisonCells.get(i).getSpace();
+        	dispersion +=  Math.pow(fullness-avarage,2);
     	}
+    	
     	dispersion = ((float) Math.sqrt(dispersion/(float)prisonCells.size()));
-        return new ResponseEntity<Float>(dispersion, HttpStatus.OK);
+        return new ResponseEntity<Float>((100.0f*dispersion)/0.5f, HttpStatus.OK);
     }
 }

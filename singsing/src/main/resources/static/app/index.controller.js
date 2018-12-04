@@ -20,7 +20,7 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
         var loadDispersion = function () {
             BackEndService.getDispersion(function (result) {
 
-                setDispersion(100-(result.data * 100));
+                setDispersion(result.data);
                 setTimeout(function () { loadDispersion(); }, 5000);
             }, function (error) {
 
