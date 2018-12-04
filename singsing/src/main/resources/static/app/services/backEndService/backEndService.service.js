@@ -223,5 +223,15 @@ angular.
                     errorCallback(error);
                 });
             };
+            
+            this.getDispersion = function (successCallback, errorCallback) {
+                $http.post("/prisoncell/dispersion",null).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
         }
     ]);

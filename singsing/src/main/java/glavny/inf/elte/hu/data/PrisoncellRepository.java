@@ -20,4 +20,6 @@ public interface PrisoncellRepository extends JpaRepository<Prisoncell,Integer> 
     int countCellByAreaId(@Param("id") int id);
     @Query(value = "select sum(space) from prisoncell;", nativeQuery = true)
     int availableSpace();
+    @Query(value = "select count(*) from prisoncell", nativeQuery = true)
+    public int countPrisonCells();
 }
