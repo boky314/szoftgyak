@@ -3,7 +3,8 @@
 app.controller('indexController', ['$scope', '$location', 'appSettings',
     'BackEndService',
     function ($scope, $location, appSettings, BackEndService) {
-
+		$scope.userPrivileges = 'GUARD';
+	
         var loadFullness = function () {
             BackEndService.getFullness(function (result) {
 
@@ -23,8 +24,24 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
                 "width": $scope.fullness + "%"
             };
         };
+        
+        var userPrivileges = function (){
+        	
+        	BackEndService.getUserPrivileges(function(result){
+         		
+        		var response = result.data;
+        		$scope.userPrivileges = response.result; 
+
+        	}, function (error) {
+                    console.log(error);
+        	});
+        };
+        
+        userPrivileges();
 
         loadFullness();
 
         $scope.versionNumber = appSettings.versionNumber;
-    }]);
+    }
+]
+);

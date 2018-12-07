@@ -44,14 +44,14 @@
           <a class="navbar-brand" href="/home">SingSing</a>
         </div>
         <ul class="nav navbar-nav">
-          <li><a href="/cells">Cells</a></li>
-          <li><a href="/prisoners">Prisoners</a></li>
-          <li><a href="/areas">Areas</a></li>
-          <li><a href="/guards">Guards</a></li>
-          <li><a href="/holiday">Holidays</a></li>
+          <li><a href="/cells" ng-if="userPrivileges != 'GUARD'">Cells</a></li>
+          <li><a href="/prisoners" ng-if="userPrivileges != 'GUARD'">Prisoners</a></li>
+          <li><a href="/areas" ng-if="userPrivileges != 'GUARD'">Areas</a></li>
+          <li><a href="/guards" ng-if="userPrivileges != 'GUARD'">Guards</a></li>
+          <li><a href="/holiday" >Holidays</a></li>
           <li><a href="/schedules">Schedule</a></li>
-          <li><a href="/topology">Topology</a></li>
-          <li><a href="/logs">Logs</a></li>
+          <li><a href="/topology" ng-if="userPrivileges != 'GUARD'">Topology</a></li>
+          <li><a href="/logs" ng-if="userPrivileges != 'GUARD'">Logs</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
       </div>

@@ -7,6 +7,8 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -27,6 +29,10 @@ public class User implements Serializable {
 	@Basic
 	@Column(name = "REGISTRATION")
 	private Timestamp registration;
+
+	@Column(name = "USER_GROUP")
+	@Enumerated(EnumType.STRING)
+	private UserGroup userGroup;
 
 	public Timestamp getRegistration() {
 		return registration;
@@ -52,6 +58,14 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public UserGroup getUserGroup() {
+		return userGroup;
+	}
+
+	public void setUserGroup(UserGroup userGroup) {
+		this.userGroup = userGroup;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -60,11 +74,11 @@ public class User implements Serializable {
 			return false;
 		User user = (User) o;
 		return Objects.equals(username, user.username) && Objects.equals(password, user.password)
-				&& Objects.equals(registration, user.registration);
+				&& Objects.equals(registration, user.registration) && Objects.equals(userGroup, user.getUserGroup());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(username, password, registration);
+		return Objects.hash(username, password, registration, userGroup);
 	}
 }

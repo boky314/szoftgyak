@@ -1,6 +1,7 @@
 'use strict';
 
-// Register `holiday` component, along with its associated controller and template
+// Register `holiday` component, along with its associated controller and
+// template
 angular.
     module('holiday', ['backEndService']).
     component('holiday', {
@@ -12,13 +13,19 @@ angular.
                 $scope.newHoliday = {};
                 $scope.holidays = [];
                 $scope.holidayModel = BackEndModel.holiday;
-                
 
                 var userIsGuardCheck = function (){
-                 	
-                	BackEndService.userIsGuard(function(result){
+                	
+                	BackEndService.getUserPrivileges(function(result){
                  		
-                		$scope.isGuard = result.data;
+                		var userGroup = result.data;
+                		console.log(userGroup.result);
+                		if(userGroup.result == 'GUARD'){
+                			$scope.isGuard = true;
+                		}else{
+                			$scope.isGuard = false;
+                		}
+                		
                 	}, function (error) {
                 		$scope.isGuard = false;
                             console.log(error);
@@ -51,7 +58,7 @@ angular.
                         dataTable.DataTable();
                     }, 500);
                 };
-
+7
                 $scope.submitNewHoliday = function () {
                 	$scope.newHoliday.status = 'NEW';
                     BackEndService.createHoliday($scope.newHoliday,

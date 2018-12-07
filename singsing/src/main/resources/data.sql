@@ -1,6 +1,6 @@
-INSERT INTO user(username,password, registration) VALUES('admin', '{noop}admin', CURRENT_TIMESTAMP());
-INSERT INTO user(username,password, registration) VALUES('admin2', '{noop}admin2', DATEADD('MONTH',-2, CURRENT_DATE));
-INSERT INTO user(username,password, registration) VALUES('Bela', '{noop}admin', CURRENT_TIMESTAMP());
+INSERT INTO user(username,password, registration, user_group) VALUES('admin', '{noop}admin', CURRENT_TIMESTAMP(), 'ADMIN');
+INSERT INTO user(username,password, registration, user_group) VALUES('admin2', '{noop}admin2', DATEADD('MONTH',-2, CURRENT_DATE), 'ADMIN');
+INSERT INTO user(username,password, registration, user_group) VALUES('Bela', '{noop}admin', CURRENT_TIMESTAMP(), 'GUARD');
 
 INSERT INTO password(username,password) VALUES('admin2', '{noop}admin2');
 INSERT INTO password(username,password) VALUES('admin', '{noop}admin');

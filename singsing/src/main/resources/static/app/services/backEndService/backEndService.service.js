@@ -245,8 +245,8 @@ angular.
                 });
           };
           
-          this.userIsGuard = function(successCallback, errorCallback){
-        	  $http.get("/prisonguard/isguard/").then(function (result) {
+          this.getUserPrivileges = function(successCallback, errorCallback){
+        	  $http.get("/user/userPrivileges/").then(function (result) {
 
         		  successCallback(result);
               }, function (error) {
@@ -254,7 +254,6 @@ angular.
                   errorCallback(error);
               });
           };
-          
           
 
             this.getFullness = function (successCallback, errorCallback) {

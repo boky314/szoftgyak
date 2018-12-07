@@ -2,9 +2,9 @@
     <h1>Holiday Maintain</h1>
     <form name="holidayForm" ng-if="isGuard">
         Holiday from date:<br>
-        <input type="date" ng-model="newHoliday[holidayModel.fromDate]" placeholder="yyyy-MM-dd"><br>
+        <input id="date-from" data-dependent-validation='{"from": "date-to", "prop": "max"}' ng-required="true" type="date" ng-model="newHoliday[holidayModel.fromDate]" placeholder="yyyy-MM-dd"><br>
         Holiday to date:<br>
-        <input type="date" ng-model="newHoliday[holidayModel.toDate]" placeholder="yyyy-MM-dd"><br>
+        <input id="date-to" data-dependent-validation='{"from": "date-from", "prop": "min"}' ng-required="true" type="date" ng-model="newHoliday[holidayModel.toDate]" placeholder="yyyy-MM-dd"><br>
         <button ng-disabled="holidayForm.$invalid" ng-click="submitNewHoliday()">
             Add
         </button>
