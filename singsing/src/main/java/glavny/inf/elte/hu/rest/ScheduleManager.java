@@ -45,8 +45,6 @@ public class ScheduleManager {
 	private static Logger log = LoggerFactory.getLogger(ScheduleManager.class);
 
 	@Autowired
-	private UserRepository userDao;
-	@Autowired
 	private PrisoncellRepository prisoncellRepository; // TODO get all space where we need guard method
 	@Autowired
 	private PrisonGuardRepository prisonGuardRepository;
@@ -56,18 +54,7 @@ public class ScheduleManager {
 	@GetMapping("/")
 	ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth) {
 		List<GuardedAreaDTO> guardedAreas = findGuardedAreas();
-
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		User findByName = userDao.findUserByName(name);
-
-		UserGroup userGroup = (findByName != null ? findByName.getUserGroup() : UserGroup.GUARD);
-
-		List<PrisonGuard> guards = null;
-		if (userGroup.equals(UserGroup.GUARD))
-			guards = prisonGuardRepository.findByName(name);
-		else
-			guards = prisonGuardRepository.findAll();
-
+		List<PrisonGuard> guards = prisonGuardRepository.findAll();
 		List<TimetableEntry> allShift = new LinkedList<>();
 
 		Queue<GuardTimeTable> rotatingTimeTables = new LinkedList<>();
