@@ -23,6 +23,6 @@ public interface HolidayRepository extends JpaRepository<Holiday, Integer> {
 	@Query("select h from Holiday h where h.fromDate > :fromDate")
 	public List<Holiday> findHolidayFrom(@Param("fromDate") Timestamp fromDate);
 
-	@Query(value="select * from Holiday where from_date <= :date and to_date > :date and guard_name = :name and status = 'APPROVED';", nativeQuery = true)
-    public List<Holiday> findByGuardByDate(@Param("name") String name, @Param("date") Timestamp date);
+	@Query(value="select * from Holiday where from_date <= :date and to_date > :date2 and guard_name = :name and status = 'APPROVED';", nativeQuery = true)
+    public List<Holiday> findByGuardByDate(@Param("name") String name, @Param("date") Timestamp date, @Param("date2") Timestamp date2);
 }

@@ -96,8 +96,11 @@ public class ScheduleManager {
 
                 // Skip when the guard is on holiday
                 Timestamp date = shift.getStartTimestamp();
+                final long offset = 24*3600*1000; // One day in milliseconds
+                // Need a one day width argument
+                Timestamp date2 = new Timestamp(date.getTime() - offset);
                 String name = t.getGuard().getPrisonGuardName();
-                List<Holiday> h = holidayRepository.findByGuardByDate(name, date);
+                List<Holiday> h = holidayRepository.findByGuardByDate(name, date, date2);
                 if (h.size() == 0) {
                     return t;
                 }
