@@ -41,149 +41,149 @@ import glavny.inf.elte.hu.data.TimetableEntry;
 @RequestMapping("schedule")
 @Transactional
 public class ScheduleManager {
-	private static Logger log = LoggerFactory.getLogger(ScheduleManager.class);
+    private static Logger log = LoggerFactory.getLogger(ScheduleManager.class);
 
-	@Autowired
-	private PrisoncellRepository prisoncellRepository; // TODO get all space where we need guard method
-	@Autowired
-	private PrisonGuardRepository prisonGuardRepository;
-	@Autowired
-	private AreaRepository areaRepository;
-	@Autowired
+    @Autowired
+    private PrisoncellRepository prisoncellRepository; // TODO get all space where we need guard method
+    @Autowired
+    private PrisonGuardRepository prisonGuardRepository;
+    @Autowired
+    private AreaRepository areaRepository;
+    @Autowired
     private HolidayRepository holidayRepository;
 
-	@GetMapping("/")
-	ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth) {
-		List<GuardedAreaDTO> guardedAreas = findGuardedAreas();
-		List<PrisonGuard> guards = prisonGuardRepository.findAll();
-		List<TimetableEntry> allShift = new LinkedList<>();
+    @GetMapping("/")
+    ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth) {
+        List<GuardedAreaDTO> guardedAreas = findGuardedAreas();
+        List<PrisonGuard> guards = prisonGuardRepository.findAll();
+        List<TimetableEntry> allShift = new LinkedList<>();
 
-		Queue<GuardTimeTable> rotatingTimeTables = new LinkedList<>();
-		List<GuardTimeTable> result = new ArrayList<>();
-		for (PrisonGuard g : guards) {
-			GuardTimeTable t = new GuardTimeTable(g);
-			result.add(t);
-			rotatingTimeTables.add(t);
-		}
+        Queue<GuardTimeTable> rotatingTimeTables = new LinkedList<>();
+        List<GuardTimeTable> result = new ArrayList<>();
+        for (PrisonGuard g : guards) {
+            GuardTimeTable t = new GuardTimeTable(g);
+            result.add(t);
+            rotatingTimeTables.add(t);
+        }
 
-		// calculate all shift
-		LocalDate ld = LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1);
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 7; ++j) {
-				LocalDate currentDate = ld.plusWeeks(i).plusDays(j);
-				Timestamp ts = Timestamp.valueOf(currentDate.atStartOfDay());
-				for (GuardedAreaDTO ga : guardedAreas) {
-					if (!guardedAreaHasPrisoner(ga, ts))
-						continue;
-					for (int k = 0; k < 3; ++k) {
-						TimetableEntry shift = new TimetableEntry();
-						shift.setWeek(i);
-						shift.setDay(j);
-						shift.setStart(k * 8);
-						shift.setEnd(k * 8 + 8);
-						shift.setLevel(ga.getLevel());
-						shift.setAreaName(ga.getAreaName());
-						allShift.add(shift);
-					}
-				}
-			}
-		}
-
-		BiFunction<Queue<GuardTimeTable>, TimetableEntry, GuardTimeTable> getNextTimetable = (timetable, shift) -> {
-		    for (int i = 0; i < timetable.size(); ++i) {
-		        GuardTimeTable t = timetable.remove();
-	            timetable.add(t);
-
-	            // Skip when the guard is on holiday
-	            Timestamp date = shift.getStartTimestamp();
-	            String name = t.getGuard().getPrisonGuardName();
-	            List<Holiday> h = holidayRepository.findByGuardByDate(name, date);
-	            if (h.size() == 0) {
-	                return t;
-	            }
+        // calculate all shift
+        LocalDate ld = LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1);
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 7; ++j) {
+                LocalDate currentDate = ld.plusWeeks(i).plusDays(j);
+                Timestamp ts = Timestamp.valueOf(currentDate.atStartOfDay());
+                for (GuardedAreaDTO ga : guardedAreas) {
+                    if (!guardedAreaHasPrisoner(ga, ts))
+                        continue;
+                    for (int k = 0; k < 3; ++k) {
+                        TimetableEntry shift = new TimetableEntry();
+                        shift.setWeek(i);
+                        shift.setDay(j);
+                        shift.setStart(k * 8);
+                        shift.setEnd(k * 8 + 8);
+                        shift.setLevel(ga.getLevel());
+                        shift.setAreaName(ga.getAreaName());
+                        allShift.add(shift);
+                    }
+                }
             }
-		    return null;
-		};
+        }
 
-		Function<TimetableEntry, TimetableEntry> findNext = elem -> {
-			for (int i = 0; i < rotatingTimeTables.size(); ++i) {
-				GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, elem);
-				if (t.addWorkEntry(elem))
-					return null;
-			}
-			return elem;
-		};
+        BiFunction<Queue<GuardTimeTable>, TimetableEntry, GuardTimeTable> getNextTimetable = (timetable, shift) -> {
+            for (int i = 0; i < timetable.size(); ++i) {
+                GuardTimeTable t = timetable.remove();
+                timetable.add(t);
 
-		// try to place all 8 hour long shits
-		allShift = allShift.stream().filter(e -> {
-			return findNext.apply(e) != null;
-		}).collect(Collectors.toList());
+                // Skip when the guard is on holiday
+                Timestamp date = shift.getStartTimestamp();
+                String name = t.getGuard().getPrisonGuardName();
+                List<Holiday> h = holidayRepository.findByGuardByDate(name, date);
+                if (h.size() == 0) {
+                    return t;
+                }
+            }
+            return null;
+        };
 
-		// chop into two 4 hour long shift
-		allShift = allShift.stream().filter(e -> {
-			// split
-			TimetableEntry first = findNext.apply(e.getFirstHalf());
-			if (first == null) {
-				TimetableEntry second = findNext.apply(e.getSecondHalf());
-				if (second == null)
-					return false;
-				else {
-					e.setStart(second.getStart());
-					e.setEnd(second.getEnd());
-				}
-			}
-			return true;
-		}).collect(Collectors.toList());
+        Function<TimetableEntry, TimetableEntry> findNext = elem -> {
+            for (int i = 0; i < rotatingTimeTables.size(); ++i) {
+                GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, elem);
+                if (t.addWorkEntry(elem))
+                    return null;
+            }
+            return elem;
+        };
 
-		// Add the extra work with zero overlaps
-		allShift = allShift.stream().filter(e -> {
-			for (int i = 0; i < rotatingTimeTables.size(); ++i) {
-			    GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
-				if (t.addExtraWorkSafe(e))
-					return false;
-			}
-			return true;
-		}).collect(Collectors.toList());
+        // try to place all 8 hour long shits
+        allShift = allShift.stream().filter(e -> {
+            return findNext.apply(e) != null;
+        }).collect(Collectors.toList());
 
-		// Add the extra work with force
-		allShift = allShift.stream().filter(e -> {
-		    GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
-			return !t.addExtraWorkHard(e);
-		}).collect(Collectors.toList());
+        // chop into two 4 hour long shift
+        allShift = allShift.stream().filter(e -> {
+            // split
+            TimetableEntry first = findNext.apply(e.getFirstHalf());
+            if (first == null) {
+                TimetableEntry second = findNext.apply(e.getSecondHalf());
+                if (second == null)
+                    return false;
+                else {
+                    e.setStart(second.getStart());
+                    e.setEnd(second.getEnd());
+                }
+            }
+            return true;
+        }).collect(Collectors.toList());
 
-		return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
-	}
+        // Add the extra work with zero overlaps
+        allShift = allShift.stream().filter(e -> {
+            for (int i = 0; i < rotatingTimeTables.size(); ++i) {
+                GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
+                if (t.addExtraWorkSafe(e))
+                    return false;
+            }
+            return true;
+        }).collect(Collectors.toList());
 
-	// Determinate all possible guarded area
-	private List<GuardedAreaDTO> findGuardedAreas() {
-		List<GuardedAreaDTO> result = new ArrayList<>();
-		List<Area> areas = areaRepository.findAll();
-		for (Area a : areas) {
-			Set<Integer> levels = new HashSet<>();
-			Set<Prisoncell> prisonCells = a.getPrisonCells();
-			for (Prisoncell cell : prisonCells)
-				levels.add(cell.getFloor());
-			for (Integer l : levels)
-				result.add(new GuardedAreaDTO(a.getId(), a.getName(), l, 1));
-		}
-		return result;
-	}
+        // Add the extra work with force
+        allShift = allShift.stream().filter(e -> {
+            GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
+            return !t.addExtraWorkHard(e);
+        }).collect(Collectors.toList());
 
-	private boolean guardedAreaHasPrisoner(GuardedAreaDTO ga, Timestamp ts) {
-		Optional<Area> byId = areaRepository.findById(ga.getAreaID());
-		if (!byId.isPresent())
-			return false;
-		Set<Prisoncell> prisonCells = byId.get().getPrisonCells().stream().filter(e -> ga.getLevel() == e.getFloor())
-				.collect(Collectors.toSet());
-		for (Prisoncell cell : prisonCells) {
-			Set<Prisoner> prisoners = cell.getPrisoners();
-			Timestamp tsEnd = Timestamp.valueOf(ts.toLocalDateTime().plusDays(1));
-			for (Prisoner p : prisoners)
-				if (!(p.getPlaceDate().after(tsEnd) || ts.after(p.getReleaseDate())))
-					return true;
-		}
-		return false;
+        return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
+    }
 
-		// return false;
-	}
+    // Determinate all possible guarded area
+    private List<GuardedAreaDTO> findGuardedAreas() {
+        List<GuardedAreaDTO> result = new ArrayList<>();
+        List<Area> areas = areaRepository.findAll();
+        for (Area a : areas) {
+            Set<Integer> levels = new HashSet<>();
+            Set<Prisoncell> prisonCells = a.getPrisonCells();
+            for (Prisoncell cell : prisonCells)
+                levels.add(cell.getFloor());
+            for (Integer l : levels)
+                result.add(new GuardedAreaDTO(a.getId(), a.getName(), l, 1));
+        }
+        return result;
+    }
+
+    private boolean guardedAreaHasPrisoner(GuardedAreaDTO ga, Timestamp ts) {
+        Optional<Area> byId = areaRepository.findById(ga.getAreaID());
+        if (!byId.isPresent())
+            return false;
+        Set<Prisoncell> prisonCells = byId.get().getPrisonCells().stream().filter(e -> ga.getLevel() == e.getFloor())
+                .collect(Collectors.toSet());
+        for (Prisoncell cell : prisonCells) {
+            Set<Prisoner> prisoners = cell.getPrisoners();
+            Timestamp tsEnd = Timestamp.valueOf(ts.toLocalDateTime().plusDays(1));
+            for (Prisoner p : prisoners)
+                if (!(p.getPlaceDate().after(tsEnd) || ts.after(p.getReleaseDate())))
+                    return true;
+        }
+        return false;
+
+        // return false;
+    }
 }
