@@ -108,7 +108,7 @@ public class ScheduleManager {
         Function<TimetableEntry, TimetableEntry> findNext = elem -> {
             for (int i = 0; i < rotatingTimeTables.size(); ++i) {
                 GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, elem);
-                if (t.addWorkEntry(elem))
+                if (t != null && t.addWorkEntry(elem))
                     return null;
             }
             return elem;
@@ -139,7 +139,7 @@ public class ScheduleManager {
         allShift = allShift.stream().filter(e -> {
             for (int i = 0; i < rotatingTimeTables.size(); ++i) {
                 GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
-                if (t.addExtraWorkSafe(e))
+                if (t != null && t.addExtraWorkSafe(e))
                     return false;
             }
             return true;
@@ -148,7 +148,10 @@ public class ScheduleManager {
         // Add the extra work with force
         allShift = allShift.stream().filter(e -> {
             GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
-            return !t.addExtraWorkHard(e);
+            if (t != null) {
+                return !t.addExtraWorkHard(e);
+            }
+            return true;
         }).collect(Collectors.toList());
 
         return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
