@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,15 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 import glavny.inf.elte.hu.data.Area;
 import glavny.inf.elte.hu.data.AreaRepository;
 import glavny.inf.elte.hu.data.GuardTimeTable;
+import glavny.inf.elte.hu.data.Holiday;
+import glavny.inf.elte.hu.data.HolidayRepository;
 import glavny.inf.elte.hu.data.PrisonGuard;
 import glavny.inf.elte.hu.data.PrisonGuardRepository;
 import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
 import glavny.inf.elte.hu.data.Prisoner;
 import glavny.inf.elte.hu.data.TimetableEntry;
-import glavny.inf.elte.hu.data.User;
-import glavny.inf.elte.hu.data.UserGroup;
-import glavny.inf.elte.hu.data.UserRepository;
 
 @RestController
 @RequestMapping("schedule")
@@ -50,6 +49,8 @@ public class ScheduleManager {
 	private PrisonGuardRepository prisonGuardRepository;
 	@Autowired
 	private AreaRepository areaRepository;
+	@Autowired
+    private HolidayRepository holidayRepository;
 
 	@GetMapping("/")
 	ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth) {
@@ -88,10 +89,25 @@ public class ScheduleManager {
 			}
 		}
 
+		BiFunction<Queue<GuardTimeTable>, TimetableEntry, GuardTimeTable> getNextTimetable = (timetable, shift) -> {
+		    for (int i = 0; i < timetable.size(); ++i) {
+		        GuardTimeTable t = timetable.remove();
+	            timetable.add(t);
+
+	            // Skip when the guard is on holiday
+	            Timestamp date = shift.getStartTimestamp();
+	            String name = t.getGuard().getPrisonGuardName();
+	            List<Holiday> h = holidayRepository.findByGuardByDate(name, date);
+	            if (h.size() == 0) {
+	                return t;
+	            }
+            }
+		    return null;
+		};
+
 		Function<TimetableEntry, TimetableEntry> findNext = elem -> {
 			for (int i = 0; i < rotatingTimeTables.size(); ++i) {
-				GuardTimeTable t = rotatingTimeTables.remove();
-				rotatingTimeTables.add(t);
+				GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, elem);
 				if (t.addWorkEntry(elem))
 					return null;
 			}
@@ -122,8 +138,7 @@ public class ScheduleManager {
 		// Add the extra work with zero overlaps
 		allShift = allShift.stream().filter(e -> {
 			for (int i = 0; i < rotatingTimeTables.size(); ++i) {
-				GuardTimeTable t = rotatingTimeTables.remove();
-				rotatingTimeTables.add(t);
+			    GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
 				if (t.addExtraWorkSafe(e))
 					return false;
 			}
@@ -132,8 +147,7 @@ public class ScheduleManager {
 
 		// Add the extra work with force
 		allShift = allShift.stream().filter(e -> {
-			GuardTimeTable t = rotatingTimeTables.remove();
-			rotatingTimeTables.add(t);
+		    GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
 			return !t.addExtraWorkHard(e);
 		}).collect(Collectors.toList());
 
