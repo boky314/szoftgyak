@@ -1,8 +1,11 @@
 package glavny.inf.elte.hu.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TimetableEntry implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -96,5 +99,11 @@ public class TimetableEntry implements Serializable {
 
     public void setExtraWork(boolean extraWork) {
         this.extraWork = extraWork;
+    }
+
+    public Timestamp getStartTimestamp() {
+        LocalDate ld = LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(1);
+        LocalDate currentDate = ld.plusWeeks(week).plusDays(day);
+        return Timestamp.valueOf(currentDate.atStartOfDay());
     }
 }
