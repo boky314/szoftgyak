@@ -3,7 +3,8 @@
 app.controller('indexController', ['$scope', '$location', 'appSettings',
     'BackEndService',
     function ($scope, $location, appSettings, BackEndService) {
-
+		$scope.userPrivileges = 'GUARD';
+	
         var loadFullness = function () {
             BackEndService.getFullness(function (result) {
 
@@ -36,6 +37,20 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
                 "width": $scope.fullness + "%"
             };
         };
+        
+        var userPrivileges = function (){
+        	
+        	BackEndService.getUserPrivileges(function(result){
+         		
+        		var response = result.data;
+        		$scope.userPrivileges = response.result; 
+
+        	}, function (error) {
+                    console.log(error);
+        	});
+        };
+        
+        userPrivileges();
 
 		var setDispersion = function(dispersion)  {
 			$scope.dispersion = dispersion;
@@ -48,4 +63,6 @@ app.controller('indexController', ['$scope', '$location', 'appSettings',
         loadFullness();
 		loadDispersion();
         $scope.versionNumber = appSettings.versionNumber;
-    }]);
+    }
+]
+);

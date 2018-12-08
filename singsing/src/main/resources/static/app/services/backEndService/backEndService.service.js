@@ -213,6 +213,48 @@ angular.
                     errorCallback(error);
                 });
             };
+            
+            this.getHolidays = function (successCallback, errorCallback){
+            	  $http.get("/holiday/").then(function (result) {
+
+                      successCallback(result);
+                  }, function (error) {
+
+                      errorCallback(error);
+                  });
+
+            };
+            
+            this.createHoliday = function (holiday, successCallback, errorCallback){
+            	  $http.post("/holiday/new", holiday).then(function (result) {
+
+                      successCallback(result);
+                  }, function (error) {
+
+                      errorCallback(error);
+                  });
+            };
+            
+            this.updateHoliday = function (holiday, successCallback, errorCallback){
+          	  $http.post("/holiday/update", holiday).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+          };
+          
+          this.getUserPrivileges = function(successCallback, errorCallback){
+        	  $http.get("/user/userPrivileges/").then(function (result) {
+
+        		  successCallback(result);
+              }, function (error) {
+
+                  errorCallback(error);
+              });
+          };
+          
 
             this.getFullness = function (successCallback, errorCallback) {
                 $http.post("/prisoncell/fullness", null).then(function (result) {
