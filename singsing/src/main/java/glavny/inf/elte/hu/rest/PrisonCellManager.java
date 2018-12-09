@@ -2,7 +2,9 @@ package glavny.inf.elte.hu.rest;
 
 import java.security.Principal;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,4 +155,17 @@ public class PrisonCellManager {
     	float dispersion = (float) Math.sqrt(deviation/(float)prisonCells.size());
         return new ResponseEntity<Float>((100.0f*dispersion)/0.5f, HttpStatus.OK);
     }
+    @GetMapping("/security")
+    public ResponseEntity<Map<String,Integer>> security() {
+    	List<Area> areas = areaRepository.findAll();
+    	Map<String,Integer> freeSpaces = new HashMap<String,Integer>();
+    	for(int i = 0; i < areas.size(); i++) {
+    		if(prisoncellRepository.sumCellByAreaId(areas.get(i).getId()) != null) {
+    			freeSpaces.put(areas.get(i).getAreaSecurity(), 
+    				prisoncellRepository.sumCellByAreaId(areas.get(i).getId()) - prisonerRepository.countPrisonerByAreaID(areas.get(i).getId()));
+    		}
+    	}
+		return new ResponseEntity<Map<String,Integer>>(freeSpaces,HttpStatus.OK);
+    }
+    
 }

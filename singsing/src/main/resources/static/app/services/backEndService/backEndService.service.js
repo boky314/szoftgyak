@@ -275,5 +275,15 @@ angular.
                     errorCallback(error);
                 });
             };
+            
+            this.getSecurity = function (successCallback, errorCallback) {
+                $http.get("/prisoncell/security").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
         }
     ]);

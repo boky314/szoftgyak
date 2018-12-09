@@ -12,6 +12,9 @@ angular.
         when('/cells', {
           template: '<cells></cells>'
         }).
+        when('/security', {
+          template: '<security></security>'
+        }).
         when('/prisoners', {
           template: '<prisoners></prisoners>'
         }).
