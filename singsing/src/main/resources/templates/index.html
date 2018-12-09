@@ -23,6 +23,7 @@
   <script src="app/index.controller.js"></script>
   <script src="app/components/home/home.component.js"></script>
   <script src="app/components/cells/cells.component.js"></script>
+  <script src="app/components/security/security.component.js"></script>
   <script src="app/components/prisoners/prisoners.component.js"></script>
   <script src="app/components/areas/areas.component.js"></script>
   <script src="app/components/guards/guards.component.js"></script>
@@ -45,6 +46,7 @@
         </div>
         <ul class="nav navbar-nav">
           <li><a href="/cells" ng-if="userPrivileges != 'GUARD'">Cells</a></li>
+          <li><a href="/security" >Security</a></li>
           <li><a href="/prisoners" ng-if="userPrivileges != 'GUARD'">Prisoners</a></li>
           <li><a href="/areas" ng-if="userPrivileges != 'GUARD'">Areas</a></li>
           <li><a href="/guards" ng-if="userPrivileges != 'GUARD'">Guards</a></li>
