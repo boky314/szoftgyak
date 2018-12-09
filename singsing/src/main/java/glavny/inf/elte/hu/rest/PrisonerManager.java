@@ -82,12 +82,18 @@ public class PrisonerManager {
     public ResponseEntity<Void> createPrisoner(@RequestBody Prisoner p, UriComponentsBuilder builder,
             Principal principal) {
         boolean flag = true;
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        if (p.getReleaseDate().before(now)) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
+
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
         if (c.getPrisoners().size() >= c.getSpace()) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         p.setCell(c);
-        p.setPlaceDate(new Timestamp(System.currentTimeMillis()));
+        p.setPlaceDate(now);
 
         prisonerRepository.save(p);
         if (flag == false) {
@@ -107,6 +113,11 @@ public class PrisonerManager {
                 new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", p.toString()));
 
         Prisoncell c = prisoncellRepository.getOne(p.getCellId());
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        if (p.getReleaseDate().before(now)) {
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
 
         if (c.getPrisoners().size() >= c.getSpace()) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
