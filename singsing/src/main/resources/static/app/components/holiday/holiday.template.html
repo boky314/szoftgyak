@@ -1,3 +1,15 @@
+<div id="holidayError" style="display:none">
+    Holiday period not valid:
+    <ul>
+        Holiday period need to be valid form: From < To date
+    </ul>
+</div>
+<div id="holidayTodayError" style="display:none">
+    Holiday not starts from today:
+    <ul>
+        Holiday must start from current date!
+    </ul>
+</div>
 <div>
     <h1>Holiday Maintain</h1>
     <form name="holidayForm" ng-if="isGuard">
@@ -29,7 +41,7 @@
             <td>
                 Status
             </td>
-            <td ng-if="!isGuard">
+            <td>
                 Operation
             </td>
         </thead>
@@ -45,6 +57,9 @@
                 </button>
                 <button ng-click="approveHoliday(i[holidayModel.id], 'DECLINED')" ng-if="!isGuard">
                 	Decline
+                </button>
+				<button ng-click="deleteHoliday(i[holidayModel.id])" ng-if="isGuard && i[holidayModel.status] == 'NEW'">
+                	Delete
                 </button>
                 </td>
             </tr>

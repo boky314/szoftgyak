@@ -15,13 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
 import glavny.inf.elte.hu.data.Holiday;
 import glavny.inf.elte.hu.data.HolidayRepository;
@@ -76,6 +74,19 @@ public class HolidayManager {
 
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.ACCEPTED);
+	}
+	
+	@PostMapping("/delete")
+	public ResponseEntity<Void> deleteHoliday(@RequestBody Holiday h, UriComponentsBuilder builder) {
+//		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+
+//		auditLogRepository
+//				.save(new AuditLog(name, new Timestamp(System.currentTimeMillis()), "APPROVE", h.toString()));
+
+		holidayRepository.delete(h);
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{guardName}")
