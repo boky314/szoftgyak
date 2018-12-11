@@ -19,6 +19,8 @@
         <br>
            Security Level:<br>
         <select id="securityLevel" ng-model="security.selectedSecurity" ng-options="securityLvl.name for securityLvl in security.availableSecurity track by securityLvl.name" ng-change="addSecurityLevel(security.selectedSecurity.name)" ></select><br>
+        <br> Extra guard Number: <br>
+        <input type="number" name="input" ng-model="newPrisoner[prisonerModel.guardNumber]" min="0" max="99" required>
         <br><br>
         <button ng-disabled="prisonerForm.$invalid" ng-click="submitNewPrisoner()">
             <span ng-if="!isEditing">Add</span>
@@ -55,6 +57,9 @@
                 RELEASE DATA
             </td>
             <td>
+                GUARD NUMBER
+            </td>
+            <td>
             </td>
             <td>
             </td>
@@ -68,6 +73,7 @@
                 <td>{{i[prisonerModel.cellId]}}</td>
                 <td>{{i[prisonerModel.placeDate] | date:'short'}}</td>
                 <td>{{i[prisonerModel.releaseDate] | date:'short' }}</td>
+                <td>{{i[prisonerModel.guardNumber]}}</td>
                 <td>
                     <button ng-click="editPrisoner(i[prisonerModel.id])">
                         Edit

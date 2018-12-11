@@ -50,6 +50,10 @@ public class Prisoner {
     @JsonIgnore
     private Prisoncell cell;
 
+    @Basic
+    @Column(name = "GUARD_NUMBER")
+    private int guardNumber;
+
     public int getId() {
         return id;
     }
@@ -134,5 +138,13 @@ public class Prisoner {
     public String toString() {
         return "Prisoner [id=" + id + ", prisonerName=" + prisonerName + ", incident=" + incident + ", releaseDate="
                 + releaseDate + ", prisonerSecurity=" + prisonerSecurity + ", placeDate=" + placeDate + ", cellId=" + cellId + "]";
+    }
+
+    public int getGuardNumber() {
+        return guardNumber;
+    }
+
+    public void setGuardNumber(int guardNumber) {
+        this.guardNumber = guardNumber;
     }
 }

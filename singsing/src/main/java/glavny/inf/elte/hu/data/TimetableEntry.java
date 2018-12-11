@@ -106,4 +106,5 @@ public class TimetableEntry implements Serializable {
         LocalDate currentDate = ld.plusWeeks(week).plusDays(day);
         return Timestamp.valueOf(currentDate.atStartOfDay());
     }
+
 }

@@ -192,7 +192,18 @@ angular.
                     }
                 );
             };
+            this.updateGuard = function (guard, successCallback, errorCallback) {
 
+                $http.post("/prisonguard/save", guard).then(
+                    function (result) {
+
+                        successCallback(result);
+                    }, function (error) {
+
+                        errorCallback(error);
+                    }
+                );
+            };
             this.deleteGuard = function (guard, successCallback, errorCallback) {
 
                 $http.post("/prisonguard/delete", guard).then(function (result) {

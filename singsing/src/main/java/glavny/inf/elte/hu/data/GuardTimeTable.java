@@ -17,6 +17,9 @@ public class GuardTimeTable implements Serializable {
 
     private int[] extraWorkPerWeek;
 
+    private int workPerDay;
+    private int workPerWeek;
+
     public PrisonGuard getGuard() {
         return guard;
     }
@@ -30,6 +33,8 @@ public class GuardTimeTable implements Serializable {
         this.guard = guard;
         workTime =  new ArrayList<>();
         extraWorkPerWeek = new int[4];
+        workPerDay = guard.getWorkPerDay();
+        workPerWeek = guard.getWorkPerWeek();
         for(int week = 0; week < 4; ++week )
         {
             workTime.add(new ArrayList<>());
@@ -45,8 +50,8 @@ public class GuardTimeTable implements Serializable {
         int week =  entry.getWeek();
         int day  =  entry.getDay();
         int time = entry.getEnd() - entry.getStart();
-        if( getTotalWorkOnDayOfWeek(week, day) + time > 12 ) return false;
-        if( getTotalWorkOnWeek(week) + time > 40 ) return false;
+        if( getTotalWorkOnDayOfWeek(week, day) + time > workPerDay ) return false;
+        if( getTotalWorkOnWeek(week) + time > workPerWeek ) return false;
         return addSafe(entry);
     }
 

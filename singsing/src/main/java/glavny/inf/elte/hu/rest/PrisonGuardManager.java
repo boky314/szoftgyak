@@ -62,4 +62,15 @@ public class PrisonGuardManager {
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
 	}
 
+	@PostMapping("/save")
+	public ResponseEntity<Void> savePrisoner(@RequestBody PrisonGuard g, Principal principal) {
+		auditLogRepository.save(
+				new AuditLog(principal.getName(), new Timestamp(System.currentTimeMillis()), "MODIFY", g.toString()));
+
+		prisonGuardRepository.save(g);
+		return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+	}
+
+
+
 }

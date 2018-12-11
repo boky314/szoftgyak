@@ -1,5 +1,8 @@
 <div>
-    <div>
+    <div  ng-show ="scheduleIncomplete" >
+        <P> There is not enough guard for every post. Schedule cannot be created.</P>
+    </div>
+    <div ng-show ="!scheduleIncomplete">
         Select week:
         <select ng-model="week" ng-options="n for n in [1,2,3,4]" ng-init="week = 1"></select>
 
