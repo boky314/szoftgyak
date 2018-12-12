@@ -17,13 +17,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import glavny.inf.elte.hu.data.Area;
 import glavny.inf.elte.hu.data.AreaRepository;
@@ -36,6 +35,7 @@ import glavny.inf.elte.hu.data.Prisoncell;
 import glavny.inf.elte.hu.data.PrisoncellRepository;
 import glavny.inf.elte.hu.data.Prisoner;
 import glavny.inf.elte.hu.data.TimetableEntry;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("schedule")
@@ -54,6 +54,29 @@ public class ScheduleManager {
 
     @GetMapping("/")
     ResponseEntity<List<GuardTimeTable>> getSchedule(Authentication auth) {
+        List<GuardTimeTable> result = generateSchedule(null);
+
+        if(result != null) {
+            return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/checkholiday")
+    ResponseEntity<Void> checkHoliday(@RequestBody Holiday h, UriComponentsBuilder builder) {
+
+        List<GuardTimeTable> result = generateSchedule(h);
+        HttpHeaders headers = new HttpHeaders();
+
+        if(result != null) {
+            return new ResponseEntity<Void>(headers, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<Void>(headers, HttpStatus.CONFLICT);
+    }
+
+    List<GuardTimeTable> generateSchedule(Holiday holiday) {
         List<GuardedAreaDTO> guardedAreas = findGuardedAreas();
         List<PrisonGuard> guards = prisonGuardRepository.findAll();
         List<TimetableEntry> allShift = new LinkedList<>();
@@ -101,8 +124,16 @@ public class ScheduleManager {
                 Timestamp date2 = new Timestamp(date.getTime() - offset);
                 String name = t.getGuard().getPrisonGuardName();
                 List<Holiday> h = holidayRepository.findByGuardByDate(name, date, date2);
-                if (h.size() == 0) {
+
+                if (h.size() == 0 && holiday == null) {
                     return t;
+                }
+
+                if(holiday != null) {
+                    if(!(holiday.getGuardName().equals(name) && holiday.getStatus().equals("APPROVED") &&
+                            holiday.getFromDate().compareTo(date) <= 0 &&  holiday.getToDate().compareTo(date2) > 0)) {
+                        return t;
+                    }
                 }
             }
             return null;
@@ -156,10 +187,11 @@ public class ScheduleManager {
 //            }
 //            return true;
 //        }).collect(Collectors.toList());
-        if(!allShift.isEmpty())
-            return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.NO_CONTENT);
+        if(!allShift.isEmpty()) {
+            return null;
+        }
 
-        return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
+        return result;
     }
 
     // Determinate all possible guarded area
