@@ -9,6 +9,7 @@ component('schedules', {
         function ScheduleController($scope, BackEndService, BackEndModel) {
             $scope.schedule = [];
             $scope.totalExtraWork = 0;
+            $scope.scheduleIncomplete = false;
 
             var calculateTotalExtraWork = function () {
               for(var key in $scope.schedule)
@@ -24,6 +25,7 @@ component('schedules', {
             var loadSchedule = function () {
                 BackEndService.getSchedule(function (result) {
                         $scope.schedule = result.data;
+                        $scope.scheduleIncomplete = (result.status === 204);
                         calculateTotalExtraWork();
                         //console.log(result);
                     },

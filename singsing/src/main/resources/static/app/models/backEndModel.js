@@ -10,7 +10,8 @@ angular.
                 area: {
                     id: "id",
                     name: "name",
-                    areaSecurity : "areaSecurity"
+                    areaSecurity : "areaSecurity",
+                    guardNumber: "guardNumber"
                 },
 
                 prisoncell: {
@@ -30,11 +31,15 @@ angular.
                     releaseDate: "releaseDate",
                     placeDate: "placeDate",
                     cellId: "cellId",
-                    prisonerSecurity: "prisonerSecurity"	
+                    prisonerSecurity: "prisonerSecurity",
+                    guardNumber: "guardNumber"
                 },
 
                 prisonGuard: {
-                    name: "prisonGuardName"
+                    id: "id",
+                    name: "prisonGuardName",
+                    workPerDay: "workPerDay",
+                    workPerWeek: "workPerWeek"
                 },
                 holiday: {
                 	id: "id",

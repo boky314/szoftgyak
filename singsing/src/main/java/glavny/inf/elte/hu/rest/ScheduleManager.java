@@ -73,18 +73,18 @@ public class ScheduleManager {
                 LocalDate currentDate = ld.plusWeeks(i).plusDays(j);
                 Timestamp ts = Timestamp.valueOf(currentDate.atStartOfDay());
                 for (GuardedAreaDTO ga : guardedAreas) {
-                    if (!guardedAreaHasPrisoner(ga, ts))
-                        continue;
-                    for (int k = 0; k < 3; ++k) {
-                        TimetableEntry shift = new TimetableEntry();
-                        shift.setWeek(i);
-                        shift.setDay(j);
-                        shift.setStart(k * 8);
-                        shift.setEnd(k * 8 + 8);
-                        shift.setLevel(ga.getLevel());
-                        shift.setAreaName(ga.getAreaName());
-                        allShift.add(shift);
-                    }
+                    int guardsNumber = guardsNeededByArea(ga, ts);
+                    for (int k = 0; k < 3; ++k)
+                        for(int g = 0; g < guardsNumber; ++g ){
+                            TimetableEntry shift = new TimetableEntry();
+                            shift.setWeek(i);
+                            shift.setDay(j);
+                            shift.setStart(k * 8);
+                            shift.setEnd(k * 8 + 8);
+                            shift.setLevel(ga.getLevel());
+                            shift.setAreaName(ga.getAreaName());
+                            allShift.add(shift);
+                        }
                 }
             }
         }
@@ -148,14 +148,16 @@ public class ScheduleManager {
             return true;
         }).collect(Collectors.toList());
 
-        // Add the extra work with force
-        allShift = allShift.stream().filter(e -> {
-            GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
-            if (t != null) {
-                return !t.addExtraWorkHard(e);
-            }
-            return true;
-        }).collect(Collectors.toList());
+//        // Add the extra work with force
+//        allShift = allShift.stream().filter(e -> {
+//            GuardTimeTable t = getNextTimetable.apply(rotatingTimeTables, e);
+//            if (t != null) {
+//                return !t.addExtraWorkHard(e);
+//            }
+//            return true;
+//        }).collect(Collectors.toList());
+        if(!allShift.isEmpty())
+            return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.NO_CONTENT);
 
         return new ResponseEntity<List<GuardTimeTable>>(result, HttpStatus.OK);
     }
@@ -170,26 +172,31 @@ public class ScheduleManager {
             for (Prisoncell cell : prisonCells)
                 levels.add(cell.getFloor());
             for (Integer l : levels)
-                result.add(new GuardedAreaDTO(a.getId(), a.getName(), l, 1));
+                result.add(new GuardedAreaDTO(a.getId(), a.getName(), l, a.getGuardNumber()));
         }
         return result;
     }
 
-    private boolean guardedAreaHasPrisoner(GuardedAreaDTO ga, Timestamp ts) {
+    private int guardsNeededByArea(GuardedAreaDTO ga, Timestamp ts) {
         Optional<Area> byId = areaRepository.findById(ga.getAreaID());
         if (!byId.isPresent())
-            return false;
+            return 0;
         Set<Prisoncell> prisonCells = byId.get().getPrisonCells().stream().filter(e -> ga.getLevel() == e.getFloor())
                 .collect(Collectors.toSet());
+        int prisonersTotal = 0;
+        int extraGuardNumber = 0;
         for (Prisoncell cell : prisonCells) {
             Set<Prisoner> prisoners = cell.getPrisoners();
             Timestamp tsEnd = Timestamp.valueOf(ts.toLocalDateTime().plusDays(1));
             for (Prisoner p : prisoners)
-                if (!(p.getPlaceDate().after(tsEnd) || ts.after(p.getReleaseDate())))
-                    return true;
+                if (!(p.getPlaceDate().after(tsEnd) || ts.after(p.getReleaseDate()))) {
+                    ++prisonersTotal;
+                    extraGuardNumber += p.getGuardNumber();
+                }
         }
-        return false;
-
+        if (prisonersTotal > 0)
+            return byId.get().getGuardNumber() + extraGuardNumber;
+        return 0;
         // return false;
     }
 }

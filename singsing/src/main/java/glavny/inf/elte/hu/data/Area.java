@@ -20,6 +20,11 @@ public class Area {
     @Column(name = "SECURITY_LEVEL")
     private String areaSecurity;
 
+    @Basic
+    @Column(name = "GUARD_NUMBER")
+    private int guardNumber;
+
+
     public int getId() {
         return id;
     }
@@ -54,5 +59,13 @@ public class Area {
     @Override
     public String toString() {
         return "Area [id=" + id + ", name=" + name + ", areaSecurity=" + areaSecurity + "]";
+    }
+
+    public int getGuardNumber() {
+        return guardNumber;
+    }
+
+    public void setGuardNumber(int guardNumber) {
+        this.guardNumber = guardNumber;
     }
 }

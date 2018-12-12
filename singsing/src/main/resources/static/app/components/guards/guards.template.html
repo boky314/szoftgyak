@@ -1,12 +1,24 @@
 <div>
-    <h1>Add new guard</h1>
+    <h1 ng-if="isEditing">Edit guard</h1>
+    <h1 ng-if="!isEditing">Add new guard</h1>
     <form name="guardForm">
         Name:
         <br>
         <input type="text" ng-model="newGuard[guardModel.name]" required>
         <br>
+        <br>
+        Working hour per day:
+        <br>
+        <input type="number" name="workPerDay" ng-model="newGuard[guardModel.workPerDay]" min="0" max="24" required>
+        <br>
+        Working hour per week:
+        <br>
+        <input type="number" name="workPerWeek" ng-model="newGuard[guardModel.workPerWeek]" min="0" max="168" required>
+        <br>
+
         <button ng-disabled="guardForm.$invalid" ng-click="submitNewGuard()">
-            Add
+            <span ng-if="!isEditing">Add</span>
+            <span ng-if="isEditing">Save</span>
         </button>
         <button ng-click="cancelNewGuard()">
             Cancel
@@ -21,12 +33,26 @@
                 NAME
             </td>
             <td>
-                DELETE
+                HOUR PER DAY
+            </td>
+            <td>
+                HOUR PER WEEK
+            </td>
+            <td>
+            </td>
+            <td>
             </td>
         </thead>
         <tbody ng-repeat="i in guards">
             <tr>
                 <td>{{i[guardModel.name]}}</td>
+                <td>{{i[guardModel.workPerDay]}}</td>
+                <td>{{i[guardModel.workPerWeek]}}</td>
+                <td>
+                    <button ng-click="editGuard(i[guardModel.id])">
+                        Edit
+                    </button>
+                </td>
                 <td>
                     <button ng-click="deleteGuard(i[guardModel.name])">
                         Delete

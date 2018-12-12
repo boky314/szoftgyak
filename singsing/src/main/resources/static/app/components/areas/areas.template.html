@@ -6,7 +6,9 @@
         <input id="areaName" type="text" ng-model="newArea[areaModel.name]" required><br>
           Security Level:<br>
         <select ng-model="security.selectedSecurity" ng-options="securityLvl.name for securityLvl in security.availableSecurity track by securityLvl.name" ng-change="addSecurityLevel(security.selectedSecurity.name)"></select><br>
-        <br>
+        <br>Guard number per level: <br>
+        <input type="number" name="input" ng-model="newArea[areaModel.guardNumber]" min="0" max="99" required>
+        <br><br>
         <button type="submit" ng-disabled="areaForm.$invalid" ng-click="submitNewArea()">
             <span ng-if="!isEditing">Add</span>
             <span ng-if="isEditing">Save</span>
@@ -30,6 +32,9 @@
                 SECURITY
             </td>
             <td>
+                GUARD NUMBER
+            </td>
+            <td>
             </td>
             <td>
             </td>
@@ -39,6 +44,7 @@
                 <td>{{i[areaModel.id]}}</td>
                 <td>{{i[areaModel.name]}}</td>
                 <td>{{i[areaModel.areaSecurity]}}</td>
+                <td>{{i[areaModel.guardNumber]}}</td>
                 <td>
                     <button ng-click="editArea(i[areaModel.id])">
                         Edit

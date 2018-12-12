@@ -37,16 +37,37 @@ angular.
 
                 $scope.submitNewGuard = function () {
 
-                    BackEndService.createGuard($scope.newGuard,
-                        function (result) {
-
-                            $scope.newGuard = {};
-                            loadGuards();
+                    if ($scope.guards.findIndex(a => a[$scope.guardModel.id] === $scope.newGuard[$scope.guardModel.id]) > -1) {
+                        BackEndService.updateGuard($scope.newGuard, function (result) {
+                                $scope.newGuard = {};
+                                $scope.isEditing = false;
+                                loadGuards();
                         }, function (error) {
-
                             console.log(error);
-                        }
-                    );
+                        });
+                    } else
+                    {
+                        BackEndService.createGuard($scope.newGuard,
+                            function (result) {
+
+                                $scope.newGuard = {};
+                                loadGuards();
+                            }, function (error) {
+
+                                console.log(error);
+                            }
+                        );
+                    }
+                };
+                $scope.editGuard = function (id) {
+
+                    var index = $scope.guards.findIndex(a => a[$scope.guardModel.id] === id);
+
+                    if (index > -1) {
+
+                        $scope.isEditing = true;
+                        $scope.newGuard = $scope.guards[index];
+                    }
                 };
 
                 $scope.deleteGuard = function (name) {
