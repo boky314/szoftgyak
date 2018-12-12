@@ -9,11 +9,13 @@ angular.
         controller: ['$scope', 'BackEndService', 'BackEndModel',
             function HolidaysController($scope, BackEndService, BackEndModel) {
 
+        		$scope.today = new Date();
         		$scope.isGuard = false;
                 $scope.newHoliday = {};
                 $scope.holidays = [];
                 $scope.holidayModel = BackEndModel.holiday;
 
+                             
                 var userIsGuardCheck = function (){
                 	
                 	BackEndService.getUserPrivileges(function(result){
@@ -58,20 +60,44 @@ angular.
                         dataTable.DataTable();
                     }, 500);
                 };
-7
+
                 $scope.submitNewHoliday = function () {
-                	$scope.newHoliday.status = 'NEW';
-                    BackEndService.createHoliday($scope.newHoliday,
-                        function (result) {
+                	
+                	var result = validateHoliday();
+                	
+                	if(result){
+                		$scope.newHoliday.status = 'NEW';
+                		BackEndService.createHoliday($scope.newHoliday,
+                				function (result) {
 
-                            $scope.newHoliday = {};
-                            loadHolidays();
-                        }, function (error) {
-                            console.log(error);
-                        }
-                    );
+                            		$scope.newHoliday = {};
+                            		loadHolidays();
+                        		}, function (error) {
+                        			console.log(error);
+                        		}
+                		);
+                	}
                 };
+                
+               $scope.deleteHoliday = function(id){
+            	   var index = $scope.holidays.findIndex(a => a[$scope.holidayModel.id] === id);
 
+                   if (index > -1) {
+
+                     var holiday = $scope.holidays[index];
+
+                     BackEndService.deleteHoliday(holiday, function (result) {
+
+                       console.log(result);
+                       loadHolidays();
+                     }, function (error) {
+
+                       console.log(error);
+                       loadHolidays();
+                     });
+                   }  
+               }; 
+               
                 $scope.approveHoliday = function (id, status) {
 
                     var index = $scope.holidays.findIndex(a => a[$scope.holidayModel.id] === id);
@@ -83,8 +109,6 @@ angular.
                         holiday.status = status;
                         
                         BackEndService.updateHoliday(holiday, function (result) {
-
-                            console.log(result);
                             loadHolidays();
                         }, function (error) {
 
@@ -93,8 +117,44 @@ angular.
                         });
                     }
                 };
-
             
+                $scope.cancelNewHoliday = function () {
+                    resetNewHoliday();
+                };
+                  
+                  var resetNewHoliday = function () {
+                	  $scope.newHoliday = {};                      
+                };
+                
+                var validateHoliday =  function (){
+                	var fromDate = $scope.newHoliday.fromDate;
+                	var toDate = $scope.newHoliday.toDate;
+                	
+                  	var holidayErrorBody = $('#holidayError');
+                  	var holidayTodayErrorBody = $('#holidayTodayError');
+                  	
+                  	var myToday = new Date($scope.today.getFullYear(), $scope.today.getMonth(), $scope.today.getDate(), 0, 0, 0);
+                  	
+                  	console.log(fromDate , myToday);
+                  	
+                  	if(fromDate < myToday){
+                  		holidayTodayErrorBody.show();
+                  		return false;
+                  	}else if(fromDate < toDate){
+                  		holidayTodayErrorBody.hide();
+                  		holidayErrorBody.hide();
+                         return true;
+                     }else if(toDate < fromDate){
+                    	 holidayTodayErrorBody.hide();
+                    	 holidayErrorBody.show();
+                         return false;
+                     }else{
+                    	 holidayTodayErrorBody.hide();
+                    	 holidayErrorBody.hide();
+                         return true;
+                     }
+                   };
+                
             }
         ]
     });

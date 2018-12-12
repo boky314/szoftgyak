@@ -46,7 +46,7 @@
         </div>
         <ul class="nav navbar-nav">
           <li><a href="/cells" ng-if="userPrivileges != 'GUARD'">Cells</a></li>
-          <li><a href="/security" >Security</a></li>
+          <li><a href="/security" ng-if="userPrivileges != 'GUARD'">Security</a></li>
           <li><a href="/prisoners" ng-if="userPrivileges != 'GUARD'">Prisoners</a></li>
           <li><a href="/areas" ng-if="userPrivileges != 'GUARD'">Areas</a></li>
           <li><a href="/guards" ng-if="userPrivileges != 'GUARD'">Guards</a></li>

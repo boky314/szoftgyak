@@ -256,6 +256,17 @@ angular.
                 });
           };
           
+          this.deleteHoliday = function(holiday, successCallback, errorCallback){
+        	  
+        	  $http.post("/holiday/delete", holiday).then(function (result) {
+
+                  successCallback(result);
+              }, function (error) {
+
+                  errorCallback(error);
+              });
+          }
+          
           this.getUserPrivileges = function(successCallback, errorCallback){
         	  $http.get("/user/userPrivileges/").then(function (result) {
 
