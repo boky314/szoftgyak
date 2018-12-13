@@ -3,6 +3,7 @@ package glavny.inf.elte.hu.rest;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +120,8 @@ public class PrisonerManager {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
 
-        if (c.getPrisoners().size() >= c.getSpace()) {
+        Optional<Prisoner> current = prisonerRepository.findById(p.getId());
+        if (!current.isPresent() && c.getPrisoners().size() >= c.getSpace()) {
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
         p.setCell(c);

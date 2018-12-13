@@ -22,6 +22,9 @@ import glavny.inf.elte.hu.data.AuditLog;
 import glavny.inf.elte.hu.data.AuditLogRepository;
 import glavny.inf.elte.hu.data.PrisonGuard;
 import glavny.inf.elte.hu.data.PrisonGuardRepository;
+import glavny.inf.elte.hu.data.User;
+import glavny.inf.elte.hu.data.UserGroup;
+import glavny.inf.elte.hu.data.UserRepository;
 
 @RestController
 @RequestMapping("prisonguard")
@@ -31,6 +34,8 @@ public class PrisonGuardManager {
 
 	@Autowired
 	private PrisonGuardRepository prisonGuardRepository;
+	@Autowired
+	private UserRepository userRepository;
 	@Autowired
 	private AuditLogRepository auditLogRepository;
 
@@ -46,6 +51,12 @@ public class PrisonGuardManager {
 				guard.toString()));
 
 		prisonGuardRepository.save(guard);
+		User user = new User();
+		user.setPassword("{noop}admin");
+		user.setRegistration(new Timestamp(System.currentTimeMillis()));
+		user.setUsername(guard.getPrisonGuardName());
+		user.setUserGroup(UserGroup.GUARD);
+		userRepository.save(user);
 
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -57,6 +68,8 @@ public class PrisonGuardManager {
 				guard.toString()));
 
 		prisonGuardRepository.delete(guard);
+		User user = userRepository.findUserByName(guard.getPrisonGuardName());
+		userRepository.delete(user);
 
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.OK);
