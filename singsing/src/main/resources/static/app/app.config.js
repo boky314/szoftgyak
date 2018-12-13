@@ -48,5 +48,5 @@ angular.
     }
   ]).
   constant('appSettings', {
-    versionNumber: "1.1.2.0"
+    versionNumber: "1.2.0.0"
   });

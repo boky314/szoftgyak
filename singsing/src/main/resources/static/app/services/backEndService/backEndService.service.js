@@ -224,59 +224,69 @@ angular.
                     errorCallback(error);
                 });
             };
-            
-            this.getHolidays = function (successCallback, errorCallback){
-            	  $http.get("/holiday/").then(function (result) {
 
-                      successCallback(result);
-                  }, function (error) {
-
-                      errorCallback(error);
-                  });
-
-            };
-            
-            this.createHoliday = function (holiday, successCallback, errorCallback){
-            	  $http.post("/holiday/new", holiday).then(function (result) {
-
-                      successCallback(result);
-                  }, function (error) {
-
-                      errorCallback(error);
-                  });
-            };
-            
-            this.updateHoliday = function (holiday, successCallback, errorCallback){
-          	  $http.post("/holiday/update", holiday).then(function (result) {
+            this.checkHoliday = function (holiday, successCallback, errorCallback) {
+                $http.post("/schedule/checkholiday", holiday).then(function (result) {
 
                     successCallback(result);
                 }, function (error) {
 
                     errorCallback(error);
                 });
-          };
-          
-          this.deleteHoliday = function(holiday, successCallback, errorCallback){
-        	  
-        	  $http.post("/holiday/delete", holiday).then(function (result) {
+            };
 
-                  successCallback(result);
-              }, function (error) {
+            this.getHolidays = function (successCallback, errorCallback) {
+                $http.get("/holiday/").then(function (result) {
 
-                  errorCallback(error);
-              });
-          }
-          
-          this.getUserPrivileges = function(successCallback, errorCallback){
-        	  $http.get("/user/userPrivileges/").then(function (result) {
+                    successCallback(result);
+                }, function (error) {
 
-        		  successCallback(result);
-              }, function (error) {
+                    errorCallback(error);
+                });
 
-                  errorCallback(error);
-              });
-          };
-          
+            };
+
+            this.createHoliday = function (holiday, successCallback, errorCallback) {
+                $http.post("/holiday/new", holiday).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.updateHoliday = function (holiday, successCallback, errorCallback) {
+                $http.post("/holiday/update", holiday).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
+            this.deleteHoliday = function (holiday, successCallback, errorCallback) {
+
+                $http.post("/holiday/delete", holiday).then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            }
+
+            this.getUserPrivileges = function (successCallback, errorCallback) {
+                $http.get("/user/userPrivileges/").then(function (result) {
+
+                    successCallback(result);
+                }, function (error) {
+
+                    errorCallback(error);
+                });
+            };
+
 
             this.getFullness = function (successCallback, errorCallback) {
                 $http.post("/prisoncell/fullness", null).then(function (result) {
@@ -287,9 +297,9 @@ angular.
                     errorCallback(error);
                 });
             };
-            
+
             this.getDispersion = function (successCallback, errorCallback) {
-                $http.post("/prisoncell/dispersion",null).then(function (result) {
+                $http.post("/prisoncell/dispersion", null).then(function (result) {
 
                     successCallback(result);
                 }, function (error) {
@@ -297,7 +307,7 @@ angular.
                     errorCallback(error);
                 });
             };
-            
+
             this.getSecurity = function (successCallback, errorCallback) {
                 $http.get("/prisoncell/security").then(function (result) {
 
